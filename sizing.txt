@@ -9,7 +9,7 @@ Breite (X-Achse): 5 Felder
 
 Höhe (Y-Achse): 4 Felder
 
-    oben und unten einen Abstand von 8% der absoluten Höhe (2*8%)
+    oben und unten einen Abstand von 8% der absoluten Höhe (2*9%)
  
     zwischen den Feldern 5% der absoluten Höhe (4*5%)
 
