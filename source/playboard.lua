@@ -2,28 +2,35 @@
 My Name is Joe
 And I work in a button factory!]]
 
-playboard = {}
+require("source/tile")
 
-absX = love.graphics.getWidth() 
-absY = love.graphics.getHeight()
+playboard = {}
+boardArray = {}
+
+for i = 1,5 do
+    boardArray[i] = {}
+    for j = 1,4 do
+        boardArray[i][j] = {}
+    end
+end
+
 
 startX = absX * 0.06
 startY = absY * 0.10
 
-tileX = absX * 0.144
-tileY = absY * 0.14
-
 disX = absX * 0.04
 disY = absY * 0.08
 
-blankX = tileX + disX
-blankY = tileY + disY
+blankX = tile.width + disX
+blankY = tile.height + disY
 
-function playboard:draw (dt)
-    love.graphics.setColor(1,1,1)
+function playboard:load()
+   --[[  love.graphics.setColor(1,1,1) ]]
     for i = 0, 4 do
         for j = 0, 3 do 
-            love.graphics.rectangle("fill", startX + (i * (disX + tileX)), startY + (j * (disY + tileY)), tileX, tileY)
+            --[[ love.graphics.rectangle("fill", startX + (i * (disX + tile.width)), startY + (j * (disY + tile.height)), tile.width, tile.height) ]]
+            boardArray[i+1][j+1] = {startX + (i * (disX + tile.width)), startY + (j * (disY + tile.height))}
+            print(boardArray[i+1][j+1][1],boardArray[i+1][j+1][2])
         end
     end
 end
@@ -31,7 +38,7 @@ end
 
 function getPos(x,y)
     if x <= startX+blankX then
-
-        return 1
+        print("hallo")
+        
     end
 end
