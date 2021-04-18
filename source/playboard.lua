@@ -42,10 +42,24 @@ function playboard:load()
     end
 end
 
---[[ Funktion um Position im boardArray zu finden ]]
-function getPos(x,y)
-    if x <= startX+blankX then
-        print("hallo")
-        
+--[[ Evtl. später durch feste Hintergrundbilder ersetzt ]]
+function playboard:draw(dt)
+
+    love.graphics.setColor(1,1,1,0.6)
+
+    for x = 1,5 do
+        for y = 1,4 do
+            love.graphics.rectangle("fill", boardArray[x][y][1],boardArray[x][y][2], tile.width, tile.height)
+        end
     end
+end
+
+
+--[[ Funktion um Array Position in Pixel Position umzuwandeln ]]
+function getXPos(x,y)
+    return boardArray[x][y][1]
+end
+
+function getYPos(x,y)
+    return boardArray[x][y][2]
 end
