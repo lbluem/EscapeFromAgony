@@ -1,4 +1,4 @@
---[[ Das Objekt "tile" wird erzeugt ]]
+--[[ Das Objekt "tile" also ein Feld wird erzeugt ]]
 tile = {}
 
 --[[ Variablen um Relation zur absoluten Größe des Fensters herzustellen]]
