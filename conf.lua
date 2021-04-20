@@ -1,9 +1,9 @@
---[[ Config Datei für einige grundsätzliche Einstellungen ]]
+--[[ Configuration Datei für einige grundsätzliche Einstellungen ]]
 
 function love.conf(t)
     t.title = "Escape from Agony"
     t.version = "11.3"
     t.console = true
-    t.window.width = 1920
-    t.window.height = 1080
+    t.window.width = 2560
+    t.window.height = 1440
 end

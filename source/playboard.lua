@@ -45,7 +45,7 @@ end
 --[[ Evtl. später durch feste Hintergrundbilder ersetzt ]]
 function playboard:draw(dt)
 
-    love.graphics.setColor(1,1,1,0.6)
+    love.graphics.setColor(1,1,1,0.3)
 
     for x = 1,5 do
         for y = 1,4 do

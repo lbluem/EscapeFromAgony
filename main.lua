@@ -3,13 +3,14 @@
 --[[ Inhalte die zunächst geladen werden ]]
 function love.load()
 
-    love.window.setFullscreen(false)
+    love.window.setFullscreen(true)
     --[[ "Dependencies" ähnlich zum Erben 
         um auf Inhalten aus anderen Dateien zuzugreifen ]]
     require ("source/playboard")
     require("source/figure")
     require("source/picker")
     require("source/enemy")
+    require("source/background")
 
     --[[ Alle Load Funktionen aus den verschiedenen Dateien
     werden geladen ]]
@@ -17,6 +18,7 @@ function love.load()
     figure:load()
     enemy:load()
     picker:load()
+    background:load()
 end
 
 --[[ Nicht direkt sichtbare Inhalte 
@@ -30,6 +32,7 @@ end
     geupdated und "gemalt" werden]]
 function love.draw()
 
+    background:draw(dt)
     playboard:draw(dt)
     picker:draw(dt)
     enemy:draw(dt)

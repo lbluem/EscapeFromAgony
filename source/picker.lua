@@ -21,8 +21,8 @@ function picker:load()
     pickerArray = boardArray
 
     --[[ Start Position des Pickers im Array ]]
-    pickPosX = pickerArray[1][2][1]
-    pickPosY = pickerArray[1][2][2]
+    pickPosX = pickerArray[1][1][1]
+    pickPosY = pickerArray[1][1][2]
 
     --[[ Größe des Pickers = Größe eines Tiles ]]
     picker.width = tile.width
@@ -43,7 +43,7 @@ function picker:draw(dt)
     if isSelected then
         love.graphics.setColor(0.8,0.5,0.7)
     else 
-        love.graphics.setColor(0.8,1,0.9)
+        love.graphics.setColor(0.9,0.9,0.9)
     end
     --[[ Picker wird "gemalt" ]]
     love.graphics.rectangle("fill", pickPosX, pickPosY, picker.width, picker.height)
@@ -58,23 +58,25 @@ function movePicker()
         eingeschränkt um nicht außerhalb des Arrays zu navigieren]]
     function love.keypressed(key, scancode, isrepeat)
         if key == "w" or key == "up" then
-            if pickPosY > pickerArray[1][1][2] then
+            if pickPosY > pickerArray[1][1][2]+1 then
                 pickPosY = pickPosY - blankY
             end
         end
         if key == "a" or key == "left" then
-            if pickPosX > pickerArray[1][1][1] then
+            if pickPosX > pickerArray[1][1][1]+1 then
                 pickPosX = pickPosX - blankX
+                figureDir = 1
             end
         end
         if key == "s" or key == "down" then
-            if pickPosY < pickerArray[1][4][2] then
+            if pickPosY < pickerArray[1][4][2]-1 then
                 pickPosY = pickPosY + blankY
             end
         end
         if key == "d" or key == "right" then
-            if pickPosX < pickerArray[5][1][1] then
+            if pickPosX < pickerArray[5][1][1]-1 then
                 pickPosX = pickPosX + blankX
+                figureDir = -1
             end
         end
 
@@ -83,6 +85,7 @@ function movePicker()
         --[[ "Auswahl" Taste ]]
         if key == "space" then
             print("SELECT")
+            nearEnemy()
             --[[ Funktion zum Auswählen und Bestätigen ]]
             selectAndConfirm()
         end
@@ -95,14 +98,28 @@ function movePicker()
         if key == "escape" then
             love.event.quit()
         end
+        --[[ Reset Button ]]
+        if key == "r" then
+            figPosX = boardArray[1][1][1]
+            figPosY = boardArray[1][1][2]
+            enePosX = boardArray[4][3][1]
+            enePosY = boardArray[4][3][2]
+            pickPosX = pickerArray[1][1][1]
+            pickPosY = pickerArray[1][1][2]
+        end
     end
 end
 
 function selected()
     --[[ Wenn Picker auf Spieler ist wird Figur "ausgewählt" ]]
-    if pickPosX == figPosX and pickPosY == figPosY then
+    if pickPosX >= figPosX-1 and pickPosX <= figPosX +1 and pickPosY >= figPosY-1 and pickPosY <= figPosY +1 then
         isSelected = true
         print("Figur ausgewaehlt")
+   
+    else
+        figpickDistX = pickPosX - figPosX
+        figpickDistY = pickPosY - figPosY
+        print("Entfernung: ",figpickDistX, figpickDistY)
     end
 end
 
@@ -123,7 +140,10 @@ function selectAndConfirm()
         --[[ Angriff falls Tile nicht leer und angegriffen werden kann ]]
         elseif not isEmpty() and canAttack then
             print("mach kaputt")
+            isSelected = false
             enePosX = -100000
+        elseif not isEmpty() then
+            print("Da ist ein Gegnaaaaar")
         end
         
     else
@@ -136,10 +156,13 @@ function isEmpty()
 
     --[[ Überprüft ob Tile/Feld beim Picker leer ist (kein Gegner oder Terrain) 
         und gibt direkt einen boolean zurück]]
-    if pickPosX == enePosX and pickPosY == enePosY then
+    if pickPosX >= enePosX -1 and pickPosX <= enePosX +1 and pickPosY >= enePosY -1 and pickPosY <= enePosY +1 then
         print("Da ist ein Gegner")
         return false
     else
+        enePickDistX = pickPosX - enePosX
+        enePickDistY = pickPosY - enePosY
+        print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY)
         return true
     end
 
@@ -150,19 +173,30 @@ end
 function nearEnemy()
 
     --[[ Wenn Figur-Position auf gleicher Breite (X-Achse) wie der Gegner ist ]]
-    if figPosX == enePosX then
+    if figPosX >= enePosX -1 and figPosX <= enePosX +1 then
         --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-        if figPosY + blankY == enePosY or figPosY - blankY == enePosY then
+        if figPosY + blankY >= enePosY -1 and figPosY + blankY <= enePosY +1 
+        or figPosY - blankY >= enePosY -1 and figPosY - blankY <= enePosY +1 then
             print("Gegner nearby")
             canAttack = true
+        else
+            canAttack = false
         end
+    
     --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
-    elseif figPosY == enePosY then
+    elseif figPosY >= enePosY -1 and figPosY <= enePosY +1 then
+        print("Auf der gleichen Y-Achse")
         --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-        if figPosX + blankX == enePosX or figPosX - blankX == enePosX  then
+        if figPosX + blankX >= enePosX -1 and figPosX + blankX <= enePosX +1
+        or figPosX - blankX >= enePosX -1 and figPosX - blankX <= enePosX +1 then
             print("Gegner nearby")
             canAttack = true
+        else
+            canAttack = false
         end
+    else
+        canAttack = false
     end
+        
 
 end
