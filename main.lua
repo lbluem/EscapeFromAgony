@@ -26,6 +26,7 @@ end
     die mehr als sekündlich geupdated werden]]
 function love.update(dt)
     
+    player:update(dt)
     picker:update(dt)
 end
 

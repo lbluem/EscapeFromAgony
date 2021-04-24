@@ -6,9 +6,9 @@ player = {}
 
 --[[ Spieler Direction ]]
 
-playDir = figureDir
 
-playMoveLimit = 3
+
+playMoveLimit = 2
 
 function player:load()
 
@@ -18,6 +18,10 @@ function player:load()
     playPosX = boardArray[1][1][1]
     playPosY = boardArray[1][1][2]
 
+end
+
+function player:update(dt)
+    playDir = figureDir
 end
 
 
