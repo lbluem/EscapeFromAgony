@@ -1,13 +1,13 @@
 --[[ Gegner "Klasse" (ist nicht wirklich eine Klasse) ]]
-require("source/figure")
+--[[ require("source/figure") ]]
 
 --[[ Objekterstellung des Gegners ]]
 enemy = {}
 
 --[[ Parameter ]]
 
-enemy.width = absX * 0.05
-enemy.height = absY * 0.05
+enemy.width = figure.width
+enemy.height = figure.height
 
 eneDistX = (tile.width/2)--[[ -(enemy.width/2) ]]
 eneDistY = (tile.height/2)--[[ -(enemy.height/2) ]]

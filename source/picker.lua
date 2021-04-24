@@ -1,19 +1,21 @@
 --[[ "Picker" zum Navigieren und Steuern der Figuren
     (siehe Beispiel "Advance War 2") ]]
 
-require("source/enemy")
+--[[ require("source/enemy") ]]
 
 --[[ Objekterstellung des Pickers ]]
 picker = {}
 
 --[[ Parameter ]]
-
+pickDist = 0
 --[[ Eine Figur wurde und ist ausgewählt ]]
 isSelected = false
 --[[ Das "gehoverte" Tile/Feld ist frei ]]
 isEmpty = true
 --[[ Spieler ist in Angriffsreichweite zu einem Gegner ]]
 canAttack = false
+--[[ Dein Zug? ]]
+yourTurn = true
 
 function picker:load()
 
@@ -84,14 +86,14 @@ function movePicker()
 
         --[[ "Auswahl" Taste ]]
         if key == "space" then
-            print("SELECT")
+            --[[ print("SELECT") ]]
             nearEnemy()
             --[[ Funktion zum Auswählen und Bestätigen ]]
             selectAndConfirm()
         end
         --[[ "Auswahl beenden" Taste ]]
         if key == "x" then
-            print("DESELECT")
+            --[[ print("DESELECT") ]]
             isSelected = false
         end  
         --[[ "Programm schließen" Taste ]]   
@@ -100,8 +102,8 @@ function movePicker()
         end
         --[[ Reset Button ]]
         if key == "r" then
-            figPosX = boardArray[1][1][1]
-            figPosY = boardArray[1][1][2]
+            playPosX = boardArray[1][1][1]
+            playPosY = boardArray[1][1][2]
             enePosX = boardArray[4][3][1]
             enePosY = boardArray[4][3][2]
             pickPosX = pickerArray[1][1][1]
@@ -111,15 +113,19 @@ function movePicker()
 end
 
 function selected()
-    --[[ Wenn Picker auf Spieler ist wird Figur "ausgewählt" ]]
-    if pickPosX >= figPosX-1 and pickPosX <= figPosX +1 and pickPosY >= figPosY-1 and pickPosY <= figPosY +1 then
-        isSelected = true
-        print("Figur ausgewaehlt")
-   
-    else
-        figpickDistX = pickPosX - figPosX
-        figpickDistY = pickPosY - figPosY
-        print("Entfernung: ",figpickDistX, figpickDistY)
+    if yourTurn then
+        --[[ Wenn Picker auf Spieler ist wird Figur "ausgewählt" ]]
+        if pickPosX >= playPosX-1 and pickPosX <= playPosX +1 and pickPosY >= playPosY-1 and pickPosY <= playPosY +1 then
+            isSelected = true
+            --[[ print("Figur ausgewaehlt") ]]
+    
+        else
+            figpickDistX = pickPosX - playPosX
+            figpickDistY = pickPosY - playPosY
+            --[[ print("Entfernung: ",figpickDistX, figpickDistY) ]]
+        end
+    else 
+        yourTurn = true
     end
 end
 
@@ -128,22 +134,24 @@ function selectAndConfirm()
     --[[ Falls ein Spieler bereits "ausgewählt" wurde ]]
     if isSelected then
         --[[ und das Tile/Feld leer ist ]]
-        if isEmpty() then 
+        if isEmpty() and moveLimit() then 
             --[[ bewegt sich die Figur zur Position des Pickers ]]
-            print("Figur bewegt sich")
-            figPosX = pickPosX
-            figPosY = pickPosY
+            --[[ print("Figur bewegt sich") ]]
+            playPosX = pickPosX
+            playPosY = pickPosY
+            --[[ Zug wird beendet ]]
+            --[[ yourTurn = false ]]
             --[[ Die Auswahl der Figur wird beendet ]]
             isSelected = false
             --[[ Nach der Bewegung wird überprüft ob ein Gegner in der Nähe ist ]]
             nearEnemy()
         --[[ Angriff falls Tile nicht leer und angegriffen werden kann ]]
         elseif not isEmpty() and canAttack then
-            print("mach kaputt")
+            --[[ print("mach kaputt") ]]
             isSelected = false
             enePosX = -100000
         elseif not isEmpty() then
-            print("Da ist ein Gegnaaaaar")
+            --[[ print("Da ist ein Gegnaaaaar") ]]
         end
         
     else
@@ -157,12 +165,12 @@ function isEmpty()
     --[[ Überprüft ob Tile/Feld beim Picker leer ist (kein Gegner oder Terrain) 
         und gibt direkt einen boolean zurück]]
     if pickPosX >= enePosX -1 and pickPosX <= enePosX +1 and pickPosY >= enePosY -1 and pickPosY <= enePosY +1 then
-        print("Da ist ein Gegner")
+        --[[ print("Da ist ein Gegner") ]]
         return false
     else
         enePickDistX = pickPosX - enePosX
         enePickDistY = pickPosY - enePosY
-        print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY)
+        --[[ print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY) ]]
         return true
     end
 
@@ -173,23 +181,23 @@ end
 function nearEnemy()
 
     --[[ Wenn Figur-Position auf gleicher Breite (X-Achse) wie der Gegner ist ]]
-    if figPosX >= enePosX -1 and figPosX <= enePosX +1 then
+    if playPosX >= enePosX -1 and playPosX <= enePosX +1 then
         --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-        if figPosY + blankY >= enePosY -1 and figPosY + blankY <= enePosY +1 
-        or figPosY - blankY >= enePosY -1 and figPosY - blankY <= enePosY +1 then
-            print("Gegner nearby")
+        if playPosY + blankY >= enePosY -1 and playPosY + blankY <= enePosY +1 
+        or playPosY - blankY >= enePosY -1 and playPosY - blankY <= enePosY +1 then
+            --[[ print("Gegner nearby") ]]
             canAttack = true
         else
             canAttack = false
         end
     
     --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
-    elseif figPosY >= enePosY -1 and figPosY <= enePosY +1 then
-        print("Auf der gleichen Y-Achse")
+    elseif playPosY >= enePosY -1 and playPosY <= enePosY +1 then
+        --[[ print("Auf der gleichen Y-Achse") ]]
         --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-        if figPosX + blankX >= enePosX -1 and figPosX + blankX <= enePosX +1
-        or figPosX - blankX >= enePosX -1 and figPosX - blankX <= enePosX +1 then
-            print("Gegner nearby")
+        if playPosX + blankX >= enePosX -1 and playPosX + blankX <= enePosX +1
+        or playPosX - blankX >= enePosX -1 and playPosX - blankX <= enePosX +1 then
+            --[[ print("Gegner nearby") ]]
             canAttack = true
         else
             canAttack = false
@@ -199,4 +207,35 @@ function nearEnemy()
     end
         
 
+end
+
+function moveLimit()
+
+    --[[ Distanz zwischen Picker und bewegende Figur
+    darf nicht über MoveLimit sein ]]
+
+    --[[     print("x Abstand",math.abs(pickPosX - playPosX),"Reichweite", 2*blankX+1)
+    print("y Abstand",math.abs(pickPosY - playPosY),"Reichweite", 2*blankY+1) ]]
+    thisMoveLimit = playMoveLimit
+
+    --[[ print(math.abs(pickPosY - playPosY) % blankY) ]]
+    if isSelected then
+        if math.abs(pickPosX - playPosX) <= thisMoveLimit*blankX+1 and
+        math.abs(pickPosY - playPosY) <= thisMoveLimit*blankY+1 then
+            --[[ math.abs(pickPosY - playPosY) / blankY ]]
+            --[[ Rundet Abstand ]]
+            yDist = math.floor(math.abs((pickPosY - playPosY) / blankY)*1+.5)/1
+            xDist = math.floor(math.abs((pickPosX - playPosX) / blankX)*1+.5)/1
+            if yDist == thisMoveLimit and pickPosX ~= playPosX then
+                return false
+            end
+            if xDist == thisMoveLimit and pickPosY ~= playPosY then
+                return false
+            else
+                return true
+            end
+        else
+            return false
+        end
+    end
 end
