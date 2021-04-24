@@ -226,10 +226,7 @@ function moveLimit()
             --[[ Rundet Abstand ]]
             yDist = math.floor(math.abs((pickPosY - playPosY) / blankY)*1+.5)/1
             xDist = math.floor(math.abs((pickPosX - playPosX) / blankX)*1+.5)/1
-            if yDist == thisMoveLimit and pickPosX ~= playPosX then
-                return false
-            end
-            if xDist == thisMoveLimit and pickPosY ~= playPosY then
+            if xDist + yDist > thisMoveLimit then
                 return false
             else
                 return true

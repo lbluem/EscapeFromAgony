@@ -8,7 +8,7 @@ player = {}
 
 playDir = figureDir
 
-playMoveLimit = 2
+playMoveLimit = 3
 
 function player:load()
 
