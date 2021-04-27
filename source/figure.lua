@@ -3,7 +3,7 @@
 
 --[[ TODO: Figuren müssen sich noch dynamisch der Fenster Größe anpassen ]]
 
---[[ require("/source/playboard") ]]
+--[[ require "source/playboard" ]]
 
 --[[ Objekterstellung der Figur (momentan noch der Spieler) ]]
 figure = {}

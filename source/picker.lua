@@ -1,7 +1,7 @@
 --[[ "Picker" zum Navigieren und Steuern der Figuren
     (siehe Beispiel "Advance War 2") ]]
 
---[[ require("source/enemy") ]]
+--[[ require "source/enemy" ]]
 
 --[[ Objekterstellung des Pickers ]]
 picker = {}
@@ -98,7 +98,8 @@ function movePicker()
         end  
         --[[ "Programm schließen" Taste ]]   
         if key == "escape" then
-            love.event.quit()
+            gameState = "MainMenu"
+            --[[ love.event.quit() ]]
         end
         --[[ Reset Button ]]
         if key == "r" then

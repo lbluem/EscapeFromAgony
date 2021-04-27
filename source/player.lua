@@ -1,12 +1,10 @@
 --[[ Spieler "Klasse" ]]
 
---[[ require("source/figure") ]]
+--[[ require "source/figure" ]]
 
 player = {}
 
 --[[ Spieler Direction ]]
-
-
 
 playMoveLimit = 2
 

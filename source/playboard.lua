@@ -3,7 +3,7 @@ My Name is Joe
 And I work in a button factory!]]
 
 --[[ Greift auf Inhalte von "tile" zu ]]
-require("source/tile")
+require "source/tile"
 
 --[[ Objekterstellung des Spielfeldes ]]
 playboard = {}

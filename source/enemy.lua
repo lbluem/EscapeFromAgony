@@ -1,5 +1,5 @@
 --[[ Gegner "Klasse" (ist nicht wirklich eine Klasse) ]]
---[[ require("source/figure") ]]
+--[[ require "source/figure" ]]
 
 --[[ Objekterstellung des Gegners ]]
 enemy = {}
