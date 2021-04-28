@@ -10,7 +10,7 @@ function love.load()
 
     love.window.setFullscreen(false)
     --[[ "Dependencies" ähnlich zum Erben 
-        um auf Inhalten aus anderen Dateien zuzugreifen ]]
+        um auf Inhalten / Funktionen aus anderen Dateien zuzugreifen ]]
     require "source/playboard"
     require "source/figure"
     require "source/picker" 

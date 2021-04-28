@@ -4,17 +4,21 @@ colorTiles = {}
 
 function colorTiles:load()
 
+    --[[ "klaut" sich das Array aus "playboard.lua" ]]
     colorTilesBoard = boardArray
 
 end
 
 function colorTiles:draw(dt)
 
+    --[[ TODO: Folgendes in seperate Funktion ummünzen und
+    mit Argument welche Figur ausgewählt ist ausgeführt wird ]]
+
     if isSelected then
         --[[ welche Figur ist ausgewählt ]]
-        --[[ colorTilesBoard wird durchlaufen und identisch 
-        zur moveLimit Funktion aus Picker dementsprechend bemalt ]]
         if yourTurn then
+            --[[ colorTilesBoard wird durchlaufen und identisch 
+            zur moveLimit Funktion aus Picker dementsprechend bemalt ]]
             for i = 1,5 do
                 for j = 1,4 do
                     if math.abs(colorTilesBoard[i][j][1] - playPosX) <= playMoveLimit*blankX+1 and
@@ -30,6 +34,7 @@ function colorTiles:draw(dt)
                 end
             end
         else
+            --[[ für den Gegner ]]
             for i = 1,5 do
                 for j = 1,4 do
                     if math.abs(colorTilesBoard[i][j][1] - enePosX) <= playMoveLimit*blankX+1 and
@@ -46,6 +51,4 @@ function colorTiles:draw(dt)
             end
         end
     end
-    --[[ love.graphics.rectangle("fill", colorTilesBoard[1][2][1],colorTilesBoard[1][2][2], tile.width, tile.height) ]]
-
 end

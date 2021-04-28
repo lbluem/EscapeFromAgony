@@ -1,4 +1,4 @@
---[[ Das Objekt "tile" also ein Feld wird erzeugt ]]
+--[[ Das Objekt (<- in Lua "Table") "tile" also ein Feld wird erzeugt ]]
 tile = {}
 
 --[[ Variablen um Relation zur absoluten Größe des Fensters herzustellen]]
@@ -10,6 +10,7 @@ absY = love.graphics.getHeight()
 tile.width = absX * 0.144
 tile.height = absY * 0.14
 
---[[ Schach ähnliche Felder Beschreibung (zur Positionsfindung) ]]
+--[[ Schach ähnliche Felder Beschreibung (zur Positionsfindung)
+Überflüssig?? ]]
 tile.quadX = 1
 tile.quadY = 1

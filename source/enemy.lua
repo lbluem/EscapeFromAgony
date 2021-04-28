@@ -28,8 +28,6 @@ end
 function enemy:draw(dt)
 
     --[[ Gegner wird "gemalt" ]]
-    --[[ love.graphics.setColor(0.1,0.5,0.3) ]]
-    --[[ love.graphics.rectangle("fill", enePosX + eneDistX, enePosY + eneDistY, enemy.width, enemy.height) ]]
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(eneImage, enePosX + eneDistX, enePosY + eneDistY, 0, -1, 1, 62.5, 62.5)
 

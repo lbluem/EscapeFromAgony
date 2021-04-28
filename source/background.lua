@@ -5,6 +5,8 @@ background = {}
 --[[ absX = love.graphics.getWidth() 
 absY = love.graphics.getHeight() ]]
 
+--[[ TODO: Hintergrund ist noch nicht Variable ]]
+
 function background:load()
     caveBG = love.graphics.newImage("assets/backgrounds/cave bg.jpg")
 end
