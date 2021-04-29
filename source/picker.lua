@@ -89,7 +89,6 @@ function movePicker()
         --[[ "Auswahl" Taste ]]
         if key == "space" then
             --[[ print("SELECT") ]]
-            nearEnemy()
             --[[ Funktion zum Auswählen und Bestätigen wird ausgeführt
             mit Argument der Position der ausgewählten Figur]]
             if yourTurn then selectAndConfirm(playPosX, playPosY) else selectAndConfirm(enePosX, enePosY) end
@@ -182,9 +181,10 @@ function isEmpty()
             --[[ print("Da ist ein Gegner") ]]
             return false
         else
+            --[[ Debugging:
             enePickDistX = pickPosX - enePosX
             enePickDistY = pickPosY - enePosY
-            --[[ print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY) ]]
+            print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY) ]]
             return true
         end
     else
