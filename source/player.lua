@@ -4,19 +4,28 @@
 
 player = {}
 
+players = {}
+table.insert(players, player)
+
 --[[ Spieler Direction ]]
 
 --[[ Wie weit kann sich der Spieler bewegen ]]
 playMoveLimit = 2
 
-function player:load()
+playerString = "will"
 
+function player:load()
+  
     --[[ Sprite der Spielerfigur ]]
-    playerImage = love.graphics.newImage("assets/char/tiny Will.png")
+    player.will = love.graphics.newImage("assets/char/tiny Will.png")
+    player.helena = love.graphics.newImage("assets/char/tiny Helena.png")
+
 
     --[[ Start Position des Spielers ]]
-    playPosX = boardArray[1][1][1]
-    playPosY = boardArray[1][1][2]
+    player.posX = boardArray[1][1][1]
+    player.posY = boardArray[1][1][2]
+
+    --[[ print(players[1].posX) ]]
 
 end
 
@@ -29,5 +38,9 @@ end
 function player:draw(dt)
 
     --[[ TODO: Feste Größenwerte müssen durch Variablen ersetzt werden]]
-    love.graphics.draw(playerImage, playPosX + figDistX, playPosY + figDistY, 0, playDir,1, 62.5, 62.5 )
+    if playerString == "will" then
+        love.graphics.draw(player.will, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 62.5, 62.5 )
+    else
+        love.graphics.draw(player.helena, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 62.5, 62.5 )
+    end
 end

@@ -21,11 +21,11 @@ function colorTiles:draw(dt)
             zur moveLimit Funktion aus Picker dementsprechend bemalt ]]
             for i = 1,5 do
                 for j = 1,4 do
-                    if math.abs(colorTilesBoard[i][j][1] - playPosX) <= playMoveLimit*blankX+1 and
-                    math.abs(colorTilesBoard[i][j][2] - playPosY) <= playMoveLimit*blankY+1 then
+                    if math.abs(colorTilesBoard[i][j][1] - player.posX) <= playMoveLimit*blankX+1 and
+                    math.abs(colorTilesBoard[i][j][2] - player.posY) <= playMoveLimit*blankY+1 then
                         --[[ Rundet Abstand ]]
-                        yDist = math.floor(math.abs((colorTilesBoard[i][j][2] - playPosY) / blankY)*1+.5)/1
-                        xDist = math.floor(math.abs((colorTilesBoard[i][j][1] - playPosX) / blankX)*1+.5)/1
+                        yDist = math.floor(math.abs((colorTilesBoard[i][j][2] - player.posY) / blankY)*1+.5)/1
+                        xDist = math.floor(math.abs((colorTilesBoard[i][j][1] - player.posX) / blankX)*1+.5)/1
                         if xDist + yDist <= playMoveLimit then
                             love.graphics.setColor(0,1,0,0.2)
                             love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tile.width, tile.height)
@@ -37,11 +37,11 @@ function colorTiles:draw(dt)
             --[[ für den Gegner ]]
             for i = 1,5 do
                 for j = 1,4 do
-                    if math.abs(colorTilesBoard[i][j][1] - enePosX) <= playMoveLimit*blankX+1 and
-                    math.abs(colorTilesBoard[i][j][2] - enePosY) <= playMoveLimit*blankY+1 then
+                    if math.abs(colorTilesBoard[i][j][1] - enemy[chosenEnemyType].posX) <= playMoveLimit*blankX+1 and
+                    math.abs(colorTilesBoard[i][j][2] - enemy[chosenEnemyType].posY) <= playMoveLimit*blankY+1 then
                         --[[ Rundet Abstand ]]
-                        yDist = math.floor(math.abs((colorTilesBoard[i][j][2] - enePosY) / blankY)*1+.5)/1
-                        xDist = math.floor(math.abs((colorTilesBoard[i][j][1] - enePosX) / blankX)*1+.5)/1
+                        yDist = math.floor(math.abs((colorTilesBoard[i][j][2] - enemy[chosenEnemyType].posY) / blankY)*1+.5)/1
+                        xDist = math.floor(math.abs((colorTilesBoard[i][j][1] - enemy[chosenEnemyType].posX) / blankX)*1+.5)/1
                         if xDist + yDist <= playMoveLimit then
                             love.graphics.setColor(1,0,0,0.2)
                             love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tile.width, tile.height)

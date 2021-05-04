@@ -17,6 +17,8 @@ canAttack = false
 --[[ Dein Zug? (Zug des Spielers) ]]
 yourTurn = true
 
+chosenEnemyType = 0
+
 --[[ Infos werden zuerst einmal geladen ]]
 function picker:load()
 
@@ -91,7 +93,7 @@ function movePicker()
             --[[ print("SELECT") ]]
             --[[ Funktion zum Auswählen und Bestätigen wird ausgeführt
             mit Argument der Position der ausgewählten Figur]]
-            if yourTurn then selectAndConfirm(playPosX, playPosY) else selectAndConfirm(enePosX, enePosY) end
+            selectAndConfirm()
         end
         --[[ "Auswahl beenden" Taste ]]
         if key == "x" then
@@ -107,10 +109,12 @@ function movePicker()
         if key == "r" then
             isSelected = false
             yourTurn = true
-            playPosX = boardArray[1][1][1]
-            playPosY = boardArray[1][1][2]
-            enePosX = boardArray[4][3][1]
-            enePosY = boardArray[4][3][2]
+            player.posX = boardArray[1][1][1]
+            player.posY = boardArray[1][1][2]
+            enemy[1].posX = boardArray[4][3][1]
+            enemy[1].posY = boardArray[4][3][2]
+            enemy[2].posX = boardArray[1][3][1]
+            enemy[2].posY = boardArray[1][3][2]
             pickPosX = pickerArray[1][1][1]
             pickPosY = pickerArray[1][1][2]
         end
@@ -118,28 +122,49 @@ function movePicker()
 end
 
 --[[ Auswahl einer Figur, falls sich Picker an entsprechender Position befindet ]]
-function selected(thisPosX, thisPosY)
+function selected()
+    if yourTurn then
+        thisPosX = player.posX
+        thisPosY = player.posY
     --[[ Wenn Picker auf Spieler ist wird Figur "ausgewählt" ]]
-    if pickPosX >= thisPosX-1 and pickPosX <= thisPosX +1 and pickPosY >= thisPosY-1 and pickPosY <= thisPosY +1 then
-        isSelected = true
+        if pickPosX >= thisPosX-1 and pickPosX <= thisPosX +1 and pickPosY >= thisPosY-1 and pickPosY <= thisPosY +1 then
+            isSelected = true
+        end
+    else
+        for i, enemy in ipairs(enemies) do
+            if pickPosX >= enemies[i][i].posX-1 and pickPosX <= enemies[i][i].posX +1 and pickPosY >= enemies[i][i].posY-1 and pickPosY <= enemies[i][i].posY +1 then
+                isSelected = true
+                chosenEnemyType = i
+            end
+        end
     end
 end
 
 --[[ Die ALLES Funktion ]]
-function selectAndConfirm(thisPosX, thisPosY)
-
+function selectAndConfirm()
     --[[ Falls ein Spieler bereits "ausgewählt" wurde ]]
     if isSelected then
+        if yourTurn then
+            thisPosX = player.posX
+            thisPosY = player.posY
+        else
+            thisPosX = enemy[chosenEnemyType].posX
+            thisPosY = enemy[chosenEnemyType].posY
+        end
+
+        isEmptyFunc()
+        print(isEmpty, canAttack)
         --[[ das Tile/Feld leer ist und das Bewegungs Limit nicht überschritten wurde]]
-        if isEmpty() and moveLimit(thisPosX,thisPosY) then 
+        if isEmpty and moveLimit(thisPosX,thisPosY) then 
             --[[ bewegt sich die Figur zur Position des Pickers ]]
             print("Figur bewegt sich")
+            --[[ hier muss noch gerundet werden ]]
             if yourTurn then
-                playPosX = pickPosX
-                playPosY = pickPosY
+                player.posX = pickPosX
+                player.posY = pickPosY
             else
-                enePosX = pickPosX
-                enePosY = pickPosY
+                enemy[chosenEnemyType].posX = pickPosX
+                enemy[chosenEnemyType].posY = pickPosY
             end
             --[[ Nach der Bewegung wird überprüft ob ein Gegner in der Nähe ist ]]
             nearEnemy()
@@ -149,27 +174,29 @@ function selectAndConfirm(thisPosX, thisPosY)
             isSelected = false
             
         --[[ Angriff falls Tile nicht leer und angegriffen werden kann ]]
-        elseif not isEmpty() and canAttack then
+        elseif not isEmpty and canAttack then
+            print("ich greife an")
             isSelected = false
             if yourTurn then
-                enePosX = -100000
+                enemy[chosenEnemyType].posX = -100000
             else
-                playPosX = -10000
+                playerString = "helena"
+                --[[ player.posX = -10000 ]]
             end
-        elseif not isEmpty() then
+        elseif not isEmpty then
             --[[ print("Da ist ein Gegnaaaaar") ]]
         end
         
     --[[ Falls noch kein Spieler ausgewählt ist 
     (Dies passiert normalerweise zuerst) ]]
     else
-        selected(thisPosX, thisPosY)
+        selected()
     end  
 end
 
 --[[ Checkt ob Gegner in unmittelbarer Reichweite ist 
     "isNotEnemy" wäre zur Zeit eig. ein passenderer Name]]
-function isEmpty()
+function isEmptyFunc()
 
     --[[ Die Plus und Minus Einsen sind um minimalste Fehler zu vermeiden
     eleganter wäre wohl das Runden Pixel Position ]]
@@ -177,22 +204,24 @@ function isEmpty()
     --[[ Überprüft ob Tile/Feld beim Picker leer ist (kein Gegner oder Terrain) 
         und gibt direkt einen boolean zurück]]
     if yourTurn then
-        if pickPosX >= enePosX -1 and pickPosX <= enePosX +1 and pickPosY >= enePosY -1 and pickPosY <= enePosY +1 then
-            --[[ print("Da ist ein Gegner") ]]
-            return false
-        else
-            --[[ Debugging:
-            enePickDistX = pickPosX - enePosX
-            enePickDistY = pickPosY - enePosY
-            print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY) ]]
-            return true
+        for i, enemy in ipairs(enemies) do
+            if pickPosX >= enemies[i][i].posX -1 and pickPosX <= enemies[i][i].posX +1 and pickPosY >= enemies[i][i].posY -1 and pickPosY <= enemies[i][i].posY +1 then
+                isEmpty = false
+                return
+            else
+                --[[ Debugging:
+                enePickDistX = pickPosX - enemy.posX
+                enePickDistY = pickPosY - enemy.posY
+                print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY) ]]
+                isEmpty = true
+            end
         end
     else
-        if pickPosX >= playPosX -1 and pickPosX <= playPosX +1 and pickPosY >= playPosY -1 and pickPosY <= playPosY +1 then
+        if pickPosX >= player.posX -1 and pickPosX <= player.posX +1 and pickPosY >= player.posY -1 and pickPosY <= player.posY +1 then
             --[[ print("Da ist ein Gegner") ]]
-            return false
+            isEmpty = false
         else
-            return true
+            isEmpty = true
         end
     end
 
@@ -204,37 +233,37 @@ function nearEnemy()
 
     --[[ Auch hier sollte das +1, -1 durch das Runden ersetzt werden ]] 
 
-    --[[ Wenn Figur-Position auf gleicher Breite (X-Achse) wie der Gegner ist ]]
-    if playPosX >= enePosX -1 and playPosX <= enePosX +1 then
-        --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-        if playPosY + blankY >= enePosY -1 and playPosY + blankY <= enePosY +1 
-        or playPosY - blankY >= enePosY -1 and playPosY - blankY <= enePosY +1 then
-            if not yourTurn then
-                --[[ print("Gegner nearby") ]]
+    for i, enemy in ipairs(enemies) do
+        --[[ Wenn Figur-Position auf gleicher Breite (X-Achse) wie der Gegner ist ]]
+        if player.posX >= enemies[i][i].posX -1 and player.posX <= enemies[i][i].posX +1 then
+            --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
+            if player.posY + blankY >= enemies[i][i].posY -1 and player.posY + blankY <= enemies[i][i].posY +1 
+            or player.posY - blankY >= enemies[i][i].posY -1 and player.posY - blankY <= enemies[i][i].posY +1 then
+                print("Gegner nearby")
+                --[[ chosenEnemyType = i ]]
+                canAttack = true
+                return
+            else
+                canAttack = false
             end
-            canAttack = true
-        else
-            canAttack = false
-        end
-    
-    --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
-    elseif playPosY >= enePosY -1 and playPosY <= enePosY +1 then
-        --[[ print("Auf der gleichen Y-Achse") ]]
-        --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-        if playPosX + blankX >= enePosX -1 and playPosX + blankX <= enePosX +1
-        or playPosX - blankX >= enePosX -1 and playPosX - blankX <= enePosX +1 then
-            if not yourTurn then
-                --[[ print("Gegner nearby") ]]
-            end
-            canAttack = true
-        else
-            canAttack = false
-        end
-    else
-        canAttack = false
-    end
         
-
+        --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
+        elseif player.posY >= enemies[i][i].posY -1 and player.posY <= enemies[i][i].posY +1 then
+            --[[ print("Auf der gleichen Y-Achse") ]]
+            --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
+            if player.posX + blankX >= enemies[i][i].posX -1 and player.posX + blankX <= enemies[i][i].posX +1
+            or player.posX - blankX >= enemies[i][i].posX -1 and player.posX - blankX <= enemies[i][i].posX +1 then
+                print("Gegner nearby")
+                --[[ chosenEnemyType = i ]]
+                canAttack = true
+                return
+            else
+                canAttack = false
+            end
+        else
+            canAttack = false
+        end
+    end
 end
 
 --[[ Boolean ob sich Figur zur ausgewählten Position bewegen kann ]]

@@ -37,7 +37,7 @@ function playboard:load()
         for j = 0, 3 do 
             --[[ love.graphics.rectangle("fill", startX + (i * (disX + tile.width)), startY + (j * (disY + tile.height)), tile.width, tile.height) ]]
             boardArray[i+1][j+1] = {startX + (i * (disX + tile.width)), startY + (j * (disY + tile.height))}
-            print(boardArray[i+1][j+1][1],boardArray[i+1][j+1][2])
+            --[[ print(boardArray[i+1][j+1][1],boardArray[i+1][j+1][2]) ]]
         end
     end
 end
