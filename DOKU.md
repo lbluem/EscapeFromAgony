@@ -72,6 +72,11 @@ Sie dient außerdem dazu den momentanen Status darzustellen
 ### **Spieler / Gegner** {player}/{enemy}
 
 - Relevante Figuren Parameter sollen überschrieben werden (Move Limit)
+- Eine Tabelle (table) mit mehreren Gegnern (auch wieder Tabellen {enemy}) wird erstellt {enemies}
+  - Mit der Funktion "Gegner hinzufügen" {addEnemy(...)} wird ein Gegner mit einem Typ (z.B. welcher Sprite) und mit seiner Position der Tabelle mit mehreren Gegnern hinzugefügt
+    - Da die Informationen in einer Tabelle nur referenziert und nicht doppelt gespeichert werden muss jedes Bild und jede Position noch mit einer "Adressierzahl" definiert werden.
+  Dafür ist das "[type]" nach "enemy"
+    - Als Folge dieser Implementierung (s.Picker Code) müssen die einzelnen Gegner Typen hochzählend erstellt und angesprochen werden sprich es kann nur einen enemy[1][1] darauffolgend [2][2]..[3][3] usw. geben und keinen enemy[1][2] o.ä.
 - Spieler / Gegner Informationen werden geladen
   - Sprites werden geladen
   - Platzierung auf Spielfeld {playPosX,playPosY}/{enePosX,enePosY}
@@ -89,6 +94,7 @@ Sie dient außerdem dazu den momentanen Status darzustellen
   - Ist angehovertes Feld leer {isEmpty}
   - Kann angegriffen werden {canAttack}(muss bei mehreren Spieler/Gegner Figuren angepasst werden)
   - Ist Zug des Spielers {yourTurn}
+  - Welcher Typ von Gegner ist ausgewählt {chosenEnemyType}
 - Der Picker bedient sich aus dem Spielfeld Array für die Positionen und der Feld Größen für die eigene Größe, wobei ersteres in einer Laden Funktion geladen werden muss, weil das Spielfeld auch erst in einer Laden Funktion bestückt wird (möglicherweise muss dies nicht der Fall sein)
   - Die Dimensionen des Pickers {picker.width,picker.height} entsprechen denselben eines einzelnen Feldes/ Tiles 
   - Hier bekommt der Picker auch seine Start Position {pickPosX,pickPosY}
@@ -103,26 +109,27 @@ Sie dient außerdem dazu den momentanen Status darzustellen
     - Die X "Auswahl beenden" Taste beendet die Auswahl einer Figur und setzt dafür den Boolean {isSelected} auf false
     - Mit der Escape Taste soll das der GameState auf {"PauseMenu"} geändert und somit das Pausen Menü aufgerufen werden
     - Mit der R "Reset" Taste wird das Spielfeld auf den Anfangs Zustand zurückgesetzt (Hauptsächlich notwendig für Test Zwecke)
-
 - Die "Auswahl" Funktion {selected} (nicht zu verwechseln mit der "Auswahl und Bestätigung" Funktion {selectAndConfirm}) prüft ob auf der Position des Pickers sich die Position des übergebenen Argumentes (z.B der Spieler Figur) befindet, wenn dies der Fall ist wird der Boolean, das eine Figur ausgewählt ist {isSelected} auf "true" gesetzt
+  - Im Falle, dass der Gegner am Zuge ist wird die "Tabelle der Gegner" {enemies} durchlaufen um alle Gegner Figuren abzudecken
+    - Die Typ Variable der ausgewählten Gegner Figur wird dann in der "Ausgewählter Gegner Typ" Variable gespeichert {chosenEnemyType}
 - Die "Auswahl und Bestätigung" Funktion {selectAndConfirm} beinhaltet eine Vielzahl an Überprüfungen und löst, falls noch keine Figur ausgewählt ist, die "Auswahl" Funktion {selected} aus
-  - Bei ausgewählter Figur {isSelected} wird zunächst mithilfe der "Ist leer" Funktion {isEmpty()} überprüft ob das ausgewählte Feld leer ist und ebenso die auch später näher erläuterte Funktion MoveLimit {moveLimit(...)} ausgeführt, beides um sicher zu stellen, dass die gewünschte Bewegung zulässig ist
+  - Bei ausgewählter Figur {isSelected} wird zunächst "Diese Position" {thisPos..} abhängig davon gesetzt wessen Zug es ist und mithilfe der "Ist leer" Funktion {isEmpty()} überprüft ob das ausgewählte Feld leer ist und ebenso die auch später näher erläuterte Funktion MoveLimit {moveLimit(...)} ausgeführt, beides um sicher zu stellen, dass die gewünschte Bewegung zulässig ist
     - Die Figur Position wird dann einfach mit der Position des Pickers überschrieben (Hier würde im besten Fall eine Bewegungs Animation noch aufgerufen werden)
     - Folgend wird die ebenfalls später erklärte "Nahe Gegner" Funktion {nearEnemy()} ausgeführt
     - Der Zug des Spielenden wird beendet. Dafür wird der entsprechende Boolean {yourTurn} "geswitched"
     - Die Auswahl einer Figur {isSelected} wird beendet
   - Falls das angesteuerte Feld nicht leer ist {isEmpty()}, aber angegriffen werden kann {canAttack}, wird das angegriffene Objekt ins Jenseits befördert und der Spielzug beendet (!Beachte kommende Problematik bei der "Ist leer" Funktion!)
 
-- Die "Ist leer" Funktion {isEmpty()} wird ausschließlich in konditionalen Abfragen ausgeführt und gibt direkt einen boolean Wert zurück
+- Die "Ist leer" Funktion {isEmpty()} existiert um den "Ist ein angehovertes Feld leer" Boolean zu verändern
+- Die Funktion geht, im Falle das Spieler dran ist, die Tabelle mit allen Gegnern durch und vergleicht Ihre Positionen mit der des Pickers
   - !Problematik! 
     - Es wurde zunächst ausgegangen mit dieser Funktion auch durch Terrain / Umgebung nicht begehbare Felder zu beachten, jedoch wird praktisch nur die Positionen der Figuren beachtet und ist auch nur als solches umgesetzt (mit eingeführtem Terrain würde man dieses durch die Umsetzung noch angreifen können, solange auch ein Gegner in Reichweite ist)
     - Der Name "ist kein Gegner" {isNotEnemy()} wäre passender und eine seperate Funktion für Umgebung wäre möglicherweise die bessere Lösung
-    - Zusätzlich müsste die Funktion mit einem Argument aufgerufen werden müssen, mit einer Liste aller Positionen der gegnerischen Figuren
   - Es findet eine Abfrage statt, ob auf der mit dem Picker ausgewählten Postion sich schon eine gegnerische Figur befindet
 
 - Die "nahe Gegner" Funktion {nearEnemy()} ist dafür verantwortlich den "Kann angegriffen" Boolean zu verändern
   - Wenn sich ein Gegner in unmittelbarer Reichweite befindet (direkt an eigenem Feld anschließend) kann angegriffen werden
-  - Auch diese Funktion bräuchte Argumente um die ausgewählte Figur zu bestimmen und die Gegner Positionen zu wissen
+  - Auch diese Funktion durchläuft die Tabelle aller Gegner um Ihre Position zu erhalten
 
 - Die "Bewegungs Limit" Funktion {moveLimit(...)} gibt nach Ausführung, wie die "ist Leer" Funktion, einen Boolean zurück
   - Der Boolean ist erfüllt, wenn die Bewegungs Limitation der ausgewählten Figur nicht überschritten wird
