@@ -3,7 +3,7 @@
 
 --[[ Gamestate ]]
 gameState = "MainMenu"
-
+playMenuState = "Playing"
 
 --[[ Inhalte die zunächst geladen werden ]]
 function love.load()
@@ -19,6 +19,7 @@ function love.load()
     require "source/player"
     require "source/colorTiles"
     require "source/menu"
+    require "source/popupMenu"
 
     --[[ Alle Load Funktionen aus den verschiedenen Dateien
     werden geladen ]]
@@ -30,6 +31,7 @@ function love.load()
     background:load()
     colorTiles:load()
     menu:load()
+    popupMenu:load()
 end
 
 --[[ Nicht direkt sichtbare Inhalte 
@@ -39,8 +41,12 @@ function love.update(dt)
     if gameState == "MainMenu" then
         menu:update(dt)
     else
-        player:update(dt)
-        picker:update(dt)
+        if playMenuState == "PopupMenu" then
+            popupMenu:update(dt)
+        else
+            player:update(dt)
+            picker:update(dt)
+        end
     end
 end
 
@@ -50,7 +56,7 @@ function love.draw()
 
     if gameState == "MainMenu" then
         menu:draw(dt)
-    else
+    elseif playMenuState ~= "PopupMenu" then
         background:draw(dt)
         playboard:draw(dt)
         colorTiles:draw(dt)
@@ -58,6 +64,14 @@ function love.draw()
         enemy:draw(dt)
         player:draw(dt)
     end
+    if playMenuState == "PopupMenu" then
+        background:draw(dt)
+        playboard:draw(dt)
+        enemy:draw(dt)
+        player:draw(dt)
+        popupMenu:draw(dt)
+    end
+    
     
     --[[ Love Versions Ausgabe im Spiel:  
     local major, minor, revision, codename = love.getVersion()

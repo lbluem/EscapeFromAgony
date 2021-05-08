@@ -13,5 +13,6 @@ end
 
 
 function background:draw(dt)
+    love.graphics.setColor(1,1,1)
     love.graphics.draw(caveBG, 0,0,0,1.1,1.1)
 end

@@ -40,7 +40,7 @@ function player:draw(dt)
     --[[ TODO: Feste Größenwerte müssen durch Variablen ersetzt werden]]
     if playerString == "will" then
         love.graphics.draw(player.will, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 62.5, 62.5 )
-    else
+    elseif playerString == "helena" then
         love.graphics.draw(player.helena, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 62.5, 62.5 )
     end
 end

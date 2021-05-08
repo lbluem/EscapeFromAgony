@@ -19,6 +19,8 @@ yourTurn = true
 
 chosenEnemyType = 0
 
+canMove = true
+
 --[[ Infos werden zuerst einmal geladen ]]
 function picker:load()
 
@@ -39,7 +41,9 @@ end
 function picker:update(dt)
 
     --[[ Funktion zur Bewegung des Pickers (siehe unten) ]]
-    movePicker()
+    if playMenuState ~= "PopupMenu" then
+        movePicker()
+    end
 
 end
 
@@ -52,7 +56,8 @@ function picker:draw(dt)
         love.graphics.setColor(0.9,0.9,0.9)
     end
     --[[ Picker wird "gemalt" ]]
-    love.graphics.rectangle("fill", pickPosX, pickPosY, picker.width, picker.height)
+    love.graphics.setLineWidth(5)
+    love.graphics.rectangle("line", pickPosX, pickPosY, picker.width, picker.height)
 
 end
 
@@ -65,23 +70,23 @@ function movePicker()
     function love.keypressed(key, scancode, isrepeat)
         if key == "w" or key == "up" then
             if pickPosY > pickerArray[1][1][2]+1 then
-                pickPosY = pickPosY - blankY
+                pickPosY = round(pickPosY - blankY,2)
             end
         end
         if key == "a" or key == "left" then
             if pickPosX > pickerArray[1][1][1]+1 then
-                pickPosX = pickPosX - blankX
+                pickPosX = round(pickPosX - blankX,2)
                 figureDir = 1
             end
         end
         if key == "s" or key == "down" then
             if pickPosY < pickerArray[1][4][2]-1 then
-                pickPosY = pickPosY + blankY
+                pickPosY = round(pickPosY + blankY,2)
             end
         end
         if key == "d" or key == "right" then
             if pickPosX < pickerArray[5][1][1]-1 then
-                pickPosX = pickPosX + blankX
+                pickPosX = round(pickPosX + blankX,2)
                 figureDir = -1
             end
         end
@@ -102,13 +107,17 @@ function movePicker()
         end  
         --[[ "Pause Menu" Taste ]]   
         if key == "escape" then
-            --[[ "Spiel Status" wird auf Pausenmenü geschaltet ]]
-            gameState = "MainMenu"
+            if playMenuState ~= "PopupMenu" then
+                --[[ "Spiel Status" wird auf Pausenmenü geschaltet ]]
+                gameState = "MainMenu"
+            end
         end
         --[[ Reset Button ]]
         if key == "r" then
             isSelected = false
             yourTurn = true
+            canAttack = false
+            canMove = true
             player.posX = boardArray[1][1][1]
             player.posY = boardArray[1][1][2]
             enemy[1].posX = boardArray[4][3][1]
@@ -142,56 +151,67 @@ end
 
 --[[ Die ALLES Funktion ]]
 function selectAndConfirm()
-    --[[ Falls ein Spieler bereits "ausgewählt" wurde ]]
-    if isSelected then
-        if yourTurn then
-            thisPosX = player.posX
-            thisPosY = player.posY
-        else
-            thisPosX = enemy[chosenEnemyType].posX
-            thisPosY = enemy[chosenEnemyType].posY
-        end
+    if playMenuState ~= "PopupMenu" then
 
-        isEmptyFunc()
-        print(isEmpty, canAttack)
-        --[[ das Tile/Feld leer ist und das Bewegungs Limit nicht überschritten wurde]]
-        if isEmpty and moveLimit(thisPosX,thisPosY) then 
-            --[[ bewegt sich die Figur zur Position des Pickers ]]
-            print("Figur bewegt sich")
-            --[[ hier muss noch gerundet werden ]]
+        --[[ Falls ein Spieler bereits "ausgewählt" wurde ]]
+        if isSelected then
             if yourTurn then
-                player.posX = pickPosX
-                player.posY = pickPosY
+                thisPosX = player.posX
+                thisPosY = player.posY
             else
-                enemy[chosenEnemyType].posX = pickPosX
-                enemy[chosenEnemyType].posY = pickPosY
+                thisPosX = enemy[chosenEnemyType].posX
+                thisPosY = enemy[chosenEnemyType].posY
             end
-            --[[ Nach der Bewegung wird überprüft ob ein Gegner in der Nähe ist ]]
-            nearEnemy()
-            --[[ Zug wird beendet ]]
-            if yourTurn then yourTurn = false else yourTurn = true end
-            --[[ Die Auswahl der Figur wird beendet ]]
-            isSelected = false
+
+            isEmptyFunc()
+            --[[ print(isEmpty, canAttack) ]]
+            --[[ das Tile/Feld leer ist und das Bewegungs Limit nicht überschritten wurde]]
+            if isEmpty and moveLimit(thisPosX,thisPosY) and canMove then 
+                --[[ bewegt sich die Figur zur Position des Pickers ]]
+                --[[ print("Figur bewegt sich") ]]
+                --[[ hier muss noch gerundet werden ]]
+                if yourTurn then
+                    player.posX = round(pickPosX,2)
+                    player.posY = round(pickPosY,2)
+                else
+                    enemy[chosenEnemyType].posX = round(pickPosX,2)
+                    enemy[chosenEnemyType].posY = round(pickPosY,2)
+                end
+                --[[ Nach der Bewegung wird überprüft ob ein Gegner in der Nähe ist ]]
+                nearEnemy()
+                canMove = false
+                --[[ Zug wird beendet ]]
+                if not canAttack then
+                    if yourTurn then yourTurn = false else yourTurn = true end
+                    canMove = true
+                else
+                    playMenuState = "PopupMenu"
+                end
+                --[[ Die Auswahl der Figur wird beendet ]]
+                isSelected = false
+                
+            --[[ Angriff falls Tile nicht leer und angegriffen werden kann ]]
+            elseif not isEmpty and canAttack then
+                --[[ print("ich greife an") ]]
+                isSelected = false
+                if yourTurn then
+                    enemy[chosenEnemyType].posX = -100000
+                else
+                    playerString = "helena"
+                    --[[ player.posX = -10000 ]]
+                end
+                if yourTurn then yourTurn = false else yourTurn = true end
+                canMove = true
+            elseif not isEmpty then
+                --[[ print("Da ist ein Gegnaaaaar") ]]
+            end
             
-        --[[ Angriff falls Tile nicht leer und angegriffen werden kann ]]
-        elseif not isEmpty and canAttack then
-            print("ich greife an")
-            isSelected = false
-            if yourTurn then
-                enemy[chosenEnemyType].posX = -100000
-            else
-                playerString = "helena"
-                --[[ player.posX = -10000 ]]
-            end
-        elseif not isEmpty then
-            --[[ print("Da ist ein Gegnaaaaar") ]]
-        end
-        
-    --[[ Falls noch kein Spieler ausgewählt ist 
-    (Dies passiert normalerweise zuerst) ]]
-    else
-        selected()
-    end  
+        --[[ Falls noch kein Spieler ausgewählt ist 
+        (Dies passiert normalerweise zuerst) ]]
+        else
+            selected()
+        end  
+    end
 end
 
 --[[ Checkt ob Gegner in unmittelbarer Reichweite ist 
@@ -239,8 +259,8 @@ function nearEnemy()
             --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
             if player.posY + blankY >= enemies[i][i].posY -1 and player.posY + blankY <= enemies[i][i].posY +1 
             or player.posY - blankY >= enemies[i][i].posY -1 and player.posY - blankY <= enemies[i][i].posY +1 then
-                print("Gegner nearby")
-                --[[ chosenEnemyType = i ]]
+                --[[ print("Gegner nearby") ]]
+                chosenEnemyType = i
                 canAttack = true
                 return
             else
@@ -253,8 +273,8 @@ function nearEnemy()
             --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
             if player.posX + blankX >= enemies[i][i].posX -1 and player.posX + blankX <= enemies[i][i].posX +1
             or player.posX - blankX >= enemies[i][i].posX -1 and player.posX - blankX <= enemies[i][i].posX +1 then
-                print("Gegner nearby")
-                --[[ chosenEnemyType = i ]]
+                --[[ print("Gegner nearby") ]]
+                chosenEnemyType = i
                 canAttack = true
                 return
             else
@@ -292,4 +312,8 @@ function moveLimit(thisPosX, thisPosY)
             return false
         end
     end
+end
+
+function round(x,fact)
+    return (math.floor(x * 10^fact + 0.5) / 10^fact)
 end
