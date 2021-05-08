@@ -2,9 +2,10 @@
 require "main"
 
 menu = {}
+local font = nil
 
 function menu:load()
-
+    font = love.graphics.newFont(32)
 end
 
 function menu:update(dt)
@@ -26,6 +27,6 @@ function menu:draw(dt)
     love.graphics.setColor(0,0,0)
     love.graphics.rectangle("fill",0,0,absX,absY)
     love.graphics.setColor(0.6,0.6,0.6)
-    love.graphics.print("Main Menu", absX/2, absY/2, 0,3,3)
+    love.graphics.print("Main Menu",font,absX/2, absY/2, 0,3,3)
 
 end

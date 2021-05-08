@@ -255,7 +255,7 @@ function nearEnemy()
 
     for i, enemy in ipairs(enemies) do
         --[[ Wenn Figur-Position auf gleicher Breite (X-Achse) wie der Gegner ist ]]
-        if player.posX >= enemies[i][i].posX -1 and player.posX <= enemies[i][i].posX +1 then
+        if round(player.posX,2) == round(enemy[i].posX,2) then
             --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
             if player.posY + blankY >= enemies[i][i].posY -1 and player.posY + blankY <= enemies[i][i].posY +1 
             or player.posY - blankY >= enemies[i][i].posY -1 and player.posY - blankY <= enemies[i][i].posY +1 then
@@ -268,7 +268,7 @@ function nearEnemy()
             end
         
         --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
-        elseif player.posY >= enemies[i][i].posY -1 and player.posY <= enemies[i][i].posY +1 then
+        elseif round(player.posY,2) == round(enemy[i].posY,2) then
             --[[ print("Auf der gleichen Y-Achse") ]]
             --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
             if player.posX + blankX >= enemies[i][i].posX -1 and player.posX + blankX <= enemies[i][i].posX +1

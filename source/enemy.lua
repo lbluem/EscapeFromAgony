@@ -16,14 +16,16 @@ eneDistY = (tile.height/2)--[[ -(enemy.height/2) ]]
 
 function addEnemy(type,x,y)
 
+    --[[ Der Typ könnte statt einer Zahl der Name, also ein String sein (z.B. "Wache1")
+    was die Übersicht vereinfachen würde ]]
     enemy[type] = {}
-    if type == 1 then
-        enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
-    elseif type == 2 then
+  --[[   if type == 1 then ]]
+    enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png")
+   --[[  elseif type == 2 then
         enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
     elseif type == 3 then
         enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
-    end
+    end ]]
     enemy[type].posX = boardArray[x][y][1]
     enemy[type].posY = boardArray[x][y][2]
     table.insert(enemies,enemy)
