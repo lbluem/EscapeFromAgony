@@ -42,6 +42,12 @@ end
 function menu:update(dt)
 	mainmenu:update()
 
+    function love.keypressed(key, scancode, isrepeat)
+        menuengine.keypressed(scancode)
+        if scancode == "escape" then
+            love.event.quit()
+        end
+    end
 end
 
 function menu:draw(dt)
@@ -62,12 +68,7 @@ function menu:draw(dt)
 	mainmenu:draw()
 end
 
-function love.keypressed(key, scancode, isrepeat)
-    menuengine.keypressed(scancode)
-    if scancode == "escape" then
-        love.event.quit()
-    end
-end
+
 
 function love.mousemoved(x, y, dx, dy, istouch)
     menuengine.mousemoved(x, y)

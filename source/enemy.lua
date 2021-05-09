@@ -52,7 +52,11 @@ function enemy:draw(dt)
     --[[ Gegner wird "gemalt" ]]
     love.graphics.setColor(1,1,1,1)
     for a, enemy in ipairs(enemies) do
-        love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 62.5)
+        if a == 2 then
+            love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 150)
+        else
+            love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 62.5)
+        end
     end
 end
 

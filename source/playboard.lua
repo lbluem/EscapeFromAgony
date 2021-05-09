@@ -32,6 +32,8 @@ blankY = tile.height + disY
 --[[ BoardArray wird einmalig am Anfang mit exakten Koordinaten gefüllt 
     (könnte zu Problemen führen, wenn während der Spielzeit die Fenstergröße angepasst wird) ]]
 function playboard:load()
+
+    tile1 = love.graphics.newImage("assets/tiles/rpgTile093.png")
    --[[  love.graphics.setColor(1,1,1) ]]
     for i = 0, 4 do
         for j = 0, 3 do 
@@ -45,11 +47,12 @@ end
 --[[ Evtl. später durch feste Hintergrundbilder ersetzt ]]
 function playboard:draw(dt)
 
-    love.graphics.setColor(1,1,1,0.3)
+    love.graphics.setColor(1,1,1)
 
     for x = 1,5 do
         for y = 1,4 do
-            love.graphics.rectangle("fill", boardArray[x][y][1],boardArray[x][y][2], tile.width, tile.height)
+            love.graphics.draw(tile1,boardArray[x][y][1],boardArray[x][y][2],0,2.9,1.6)
+            --[[ love.graphics.rectangle("fill", boardArray[x][y][1],boardArray[x][y][2], tile.width, tile.height) ]]
         end
     end
 end
