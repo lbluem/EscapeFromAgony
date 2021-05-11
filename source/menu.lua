@@ -28,7 +28,7 @@ function menu:load()
 	love.graphics.setFont(love.graphics.newFont(50))
 	background_menu = love.graphics.newImage("assets/backgrounds/menu_bg.jpg")
 	sound_bg = love.audio.newSource("assets/sound/Medieval Song Village Consort [No Copyright Music].mp3", "stream")
-	sound_bg:setVolume(0.1)
+	sound_bg:setVolume(0.04)
 	love.audio.play(sound_bg)
 	
 	

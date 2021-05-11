@@ -45,6 +45,7 @@ function love.update(dt)
             popupMenu:update(dt)
         else
             player:update(dt)
+            enemy:update(dt)
             picker:update(dt)
         end
     end

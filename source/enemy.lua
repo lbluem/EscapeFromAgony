@@ -8,6 +8,10 @@ enemies = {}
 
 --[[ Parameter ]]
 
+eneCanAttack = false
+eneMoveLimit = 1
+eneCanMove = true
+
 enemy.width = figure.width
 enemy.height = figure.height
 
@@ -20,7 +24,8 @@ function addEnemy(type,x,y)
     was die Übersicht vereinfachen würde ]]
     enemy[type] = {}
   --[[   if type == 1 then ]]
-    enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png")
+    --[[ enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png") ]]
+    enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
    --[[  elseif type == 2 then
         enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
     elseif type == 3 then
@@ -28,50 +33,136 @@ function addEnemy(type,x,y)
     end ]]
     enemy[type].posX = boardArray[x][y][1]
     enemy[type].posY = boardArray[x][y][2]
+    enemy[type].movLimit = 1
     table.insert(enemies,enemy)
 end
 
 
 function enemy:load()
 
---[[     enemy.wache1 = love.graphics.newImage("assets/char/tiny Wache 1.png")
+    --[[     enemy.wache1 = love.graphics.newImage("assets/char/tiny Wache 1.png")
     enemy.wache2 = love.graphics.newImage("assets/char/tiny Wache 2.png") ]]
     --[[ Start Position im Array ]]
---[[     enemy.posX = boardArray[4][3][1]
+    --[[     enemy.posX = boardArray[4][3][1]
     enemy.posY = boardArray[4][3][2] ]]
     addEnemy(1,4,4)
-    addEnemy(2,2,3)
+    addEnemy(2,5,3)
     --[[ print(enemies[2].posX) ]]
 end
 
 
 function enemy:update(dt)
+    function love.keypressed(key, scancode, isrepeat)
+        if key == "r" then
+            print("hallo 2")
+            addEnemy(1,4,4)
+            addEnemy(2,5,3)
+        end
+    end
+    enemyTurn()
+    
 end
 
 function enemy:draw(dt)
     --[[ Gegner wird "gemalt" ]]
     love.graphics.setColor(1,1,1,1)
     for a, enemy in ipairs(enemies) do
-        if a == 2 then
+        --[[ if a == 2 then
             love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 150)
-        else
+        else ]]
             love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 62.5)
-        end
+        --[[ end ]]
     end
 end
 
+thisEneML = {}
 
+function enemyTurn()
 
-
---[[ function enemy:create(type, x,y)
-    self.__index = self
-    
-    return setmetatable({
-        img = love.graphics.newImage("assets/char/tiny Wache 1.png"),
-        posX = boardArray[x][y][1],
-        posY = boardArray[x][y][2]
-    }, self)
-    
+    for i, enemy in ipairs(enemies) do
+        table.insert(thisEneML,enemy[i].movLimit)
+    end
+    if not yourTurn then
+        for i, enemy in ipairs(enemies) do
+            --[[ Kann der Gegner angreifen? ]]
+            nearPlayer()
+            if eneCanAttack then
+                player.posX = -100000 
+                print("Du bist tot")
+            end
+            if round(player.posX,2) < round(enemy[i].posX,2) then
+                if enemy[i].movLimit > 0 and eneCanMove then
+                    enemy[i].posX = enemy[i].posX - blankX
+                    thisEneML[i] = thisEneML[i] - 1
+                    eneCanMove = false
+                    print("Nummer "..i.." bewegt sich horizontal")
+                end
+            elseif round(player.posX,2) > round(enemy[i].posX,2) then
+                if enemy[i].movLimit > 0 and eneCanMove then
+                    enemy[i].posX = enemy[i].posX + blankX
+                    thisEneML[i] = thisEneML[i] - 1
+                    eneCanMove = false
+                    print("Nummer "..i.." bewegt sich horizontal")
+                end
+            elseif round(player.posY,2) < round(enemy[i].posY,2) then
+                if enemy[i].movLimit > 0 and eneCanMove then
+                    enemy[i].posY = enemy[i].posY - blankY
+                    thisEneML[i] = thisEneML[i] - 1
+                    eneCanMove = false
+                    print("Nummer "..i.." bewegt sich")
+                end
+            elseif round(player.posY,2) > round(enemy[i].posY,2) then
+                if enemy[i].movLimit > 0 and eneCanMove then
+                    enemy[i].posY = enemy[i].posY + blankY
+                    thisEneML[i] = thisEneML[i] - 1
+                    eneCanMove = false
+                    print("Nummer "..i.." bewegt sich")
+                end
+            end
+        end
+    end
+    table.remove(thisEneML)
+    yourTurn = true
+    eneCanMove = true
+    canMove = true
 end
 
-return enemy ]]
+
+function round(x,fact)
+    return (math.floor(x * 10^fact + 0.5) / 10^fact)
+end
+
+
+function nearPlayer()
+
+    for i, enemy in ipairs(enemies) do
+        if round(player.posX,2) == round(enemy[i].posX,2) then
+            --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
+            if player.posY + blankY >= enemy[i].posY -1 and player.posY + blankY <= enemy[i].posY +1 
+            or player.posY - blankY >= enemy[i].posY -1 and player.posY - blankY <= enemy[i].posY +1 then
+                --[[ print("Gegner nearby") ]]
+                eneCanAttack = true
+                return
+            else
+                eneCanAttack = false
+                print("Spieler ist nicht auf der selben Y-Achse (+/-1)")
+            end
+        
+        --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
+        elseif round(player.posY,2) == round(enemy[i].posY,2) then
+            --[[ print("Auf der gleichen Y-Achse") ]]
+            --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
+            if player.posX + blankX >= enemy[i].posX -1 and player.posX + blankX <= enemy[i].posX +1
+            or player.posX - blankX >= enemy[i].posX -1 and player.posX - blankX <= enemy[i].posX +1 then
+                --[[ print("Gegner nearby") ]]
+                eneCanAttack = true
+                return
+            else
+                eneCanAttack = false
+                print("Spieler ist nicht auf der selben X-Achse (+/-1)")
+            end
+        else
+            eneCanAttack = false
+        end
+    end
+end

@@ -92,7 +92,6 @@ function movePicker()
         end
 
 
-
         --[[ "Auswahl" Taste ]]
         if key == "space" then
             --[[ print("SELECT") ]]
@@ -114,16 +113,28 @@ function movePicker()
         end
         --[[ Reset Button ]]
         if key == "r" then
+            print(#enemies)
+            print("hallo 1")
             isSelected = false
             yourTurn = true
             canAttack = false
             canMove = true
             player.posX = boardArray[1][1][1]
             player.posY = boardArray[1][1][2]
-            enemy[1].posX = boardArray[4][3][1]
-            enemy[1].posY = boardArray[4][3][2]
-            enemy[2].posX = boardArray[1][3][1]
-            enemy[2].posY = boardArray[1][3][2]
+            if #enemies == 0 then
+                x1 = love.math.random(3,5)
+                y1 = love.math.random(2,4)
+                addEnemy(1,x1,y1)
+                repeat
+                    x2 = love.math.random(3,5)
+                    y2 = love.math.random(2,4)
+                until x1 ~= x2 and y1 ~= y2
+                addEnemy(2,x2,y2)
+            end
+            --[[ enemy[1].posX = boardArray[4][2][1]
+            enemy[1].posY = boardArray[4][2][2]
+            enemy[2].posX = boardArray[5][3][1]
+            enemy[2].posY = boardArray[5][3][2] ]]
             pickPosX = pickerArray[1][1][1]
             pickPosY = pickerArray[1][1][2]
         end
@@ -163,6 +174,7 @@ function selectAndConfirm()
                 thisPosY = enemy[chosenEnemyType].posY
             end
 
+            nearEnemy()
             isEmptyFunc()
             --[[ print(isEmpty, canAttack) ]]
             --[[ das Tile/Feld leer ist und das Bewegungs Limit nicht überschritten wurde]]
@@ -195,7 +207,10 @@ function selectAndConfirm()
                 --[[ print("ich greife an") ]]
                 isSelected = false
                 if yourTurn then
-                    enemy[chosenEnemyType].posX = -100000
+                    table.remove(enemy,1)
+                    table.remove(enemies,1)
+                    print("Der "..chosenEnemyType.."te Gegner wurde deleted")
+                    --[[ enemy[chosenEnemyType].posX = -100000 ]]
                 else
                     playerString = "helena"
                     --[[ player.posX = -10000 ]]

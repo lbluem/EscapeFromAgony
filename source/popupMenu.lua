@@ -3,10 +3,12 @@ popupMenu = {}
 
 local font = nil
 
-function newOption(text, func)
+optSelect = 1
+
+function newOption(text)
     return {
-        text = text,
-        func = func
+        text = text
+        --[[ func = func ]]
     }
 end
 
@@ -23,16 +25,16 @@ function popupMenu:load()
 
 
     table.insert(popupMenu, newOption(
-        "Attack",
-        function()
+        "Attack"))
+        --[[ function()
             playMenuState = "Playing"
-        end))
+        end ))  ]]
     table.insert(popupMenu, newOption(
-        "End turn",
-        function()
+        "End turn"))
+        --[[ function()
             if yourTurn then yourTurn = false else yourTurn = true end
             playMenuState = "Playing"
-        end))
+         end )) ]]
 
     popupMenu_height = option_height * #popupMenu
 end
@@ -40,6 +42,23 @@ end
 function popupMenu:update(dt)
 
     function love.keypressed(key, scancode, isrepeat)
+        if key == "w" or key == "up" then
+            if optSelect == 1 then
+                optSelect = 2
+            elseif optSelect == 2 then
+                optSelect = 1
+            end
+        end
+        if key == "s" or key == "down" then
+            if optSelect == 1 then
+                optSelect = 2
+            elseif optSelect == 2 then
+                optSelect = 1
+            end
+        end 
+        if key == "space" or key == "return" then
+            chosenOption()
+        end
         if key == "escape" then
             playMenuState = "Playing"
         end
@@ -55,7 +74,24 @@ function popupMenu:draw(dt)
         textW = font:getWidth(popupMenu[i].text)
         textH = font:getHeight(popupMenu[i].text)
         font_middleX = option_middleX + option_width/2 - textW/2
-        font_middleY = option_middleY + option_height/2 - textH/2
-        love.graphics.print(popupMenu[i].text,font,font_middleX,font_middleY)
+        font_middleY = (option_middleY + option_height/2 - textH/2) - 20
+        if optSelect == i then
+            love.graphics.print(">"..popupMenu[i].text.."<",font,font_middleX,font_middleY + ((i-1)*50))
+        else
+            love.graphics.print(popupMenu[i].text,font,font_middleX,font_middleY + ((i-1)*50))
+        end
     end
+end
+
+
+function chosenOption()
+
+    if optSelect == 1 then
+        isSelected = true
+        playMenuState = "Playing"
+    elseif optSelect == 2 then
+        if yourTurn then yourTurn = false else yourTurn = true end
+            playMenuState = "Playing"
+    end
+
 end
