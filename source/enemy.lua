@@ -26,7 +26,7 @@ function addEnemy(type,x,y)
   --[[   if type == 1 then ]]
     --[[ enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png") ]]
     enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
-   --[[  elseif type == 2 then
+    --[[  elseif type == 2 then
         enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
     elseif type == 3 then
         enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")

@@ -16,5 +16,9 @@ end
 
 function background:draw(dt)
     love.graphics.setColor(1,1,1)
-    love.graphics.draw(stonyBG, 0,0,0,2.5,1.7)
+    if levelState == 1 then
+        love.graphics.draw(stonyBG, 0,0,0,2.5,1.7)
+    elseif levelState == 2 then
+        love.graphics.draw(caveBG, 0,0,0,2.5,1.7)
+    end
 end

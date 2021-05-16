@@ -2,8 +2,10 @@
 
 
 --[[ Gamestate ]]
-gameState = "MainMenu"
-playMenuState = "Playing"
+gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue" ]]
+playMenuState = "Playing" --[[ "Playing", "PopupMenu" ]]
+dialogueState = 1 --[[ Level: 0, 1, 2, 3 ]]
+levelState = 1
 
 --[[ Inhalte die zunächst geladen werden ]]
 function love.load()
@@ -20,11 +22,12 @@ function love.load()
     require "source/colorTiles"
     require "source/menu"
     require "source/popupMenu"
+    require "source/dialogue"
 
     --[[ Alle Load Funktionen aus den verschiedenen Dateien
     werden geladen ]]
     playboard:load()
-
+    dialogue:load()
     player:load()
     enemy:load()
     picker:load()
@@ -40,7 +43,7 @@ function love.update(dt)
     
     if gameState == "MainMenu" then
         menu:update(dt)
-    else
+    elseif gameState == "Game" then
         if playMenuState == "PopupMenu" then
             popupMenu:update(dt)
         else
@@ -48,6 +51,8 @@ function love.update(dt)
             enemy:update(dt)
             picker:update(dt)
         end
+    elseif gameState == "Dialogue" then
+        dialogue:update(dt)
     end
 end
 
@@ -58,12 +63,16 @@ function love.draw()
     if gameState == "MainMenu" then
         menu:draw(dt)
     elseif playMenuState ~= "PopupMenu" then
-        background:draw(dt)
-        playboard:draw(dt)
-        colorTiles:draw(dt)
-        picker:draw(dt)
-        enemy:draw(dt)
-        player:draw(dt)
+        if gameState == "Dialogue" then
+            dialogue:draw()
+        else 
+            background:draw(dt)
+            playboard:draw(dt)
+            colorTiles:draw(dt)
+            picker:draw(dt)
+            enemy:draw(dt)
+            player:draw(dt)
+        end
     end
     if playMenuState == "PopupMenu" then
         background:draw(dt)

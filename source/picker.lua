@@ -103,6 +103,7 @@ function movePicker()
         if key == "x" then
             --[[ print("DESELECT") ]]
             isSelected = false
+            --[[ gameState = "Dialogue" ]]
         end  
         --[[ "Pause Menu" Taste ]]   
         if key == "escape" then
@@ -143,21 +144,11 @@ end
 
 --[[ Auswahl einer Figur, falls sich Picker an entsprechender Position befindet ]]
 function selected()
-    if yourTurn then
-        thisPosX = player.posX
-        thisPosY = player.posY
-    --[[ Wenn Picker auf Spieler ist wird Figur "ausgewählt" ]]
-        if pickPosX >= thisPosX-1 and pickPosX <= thisPosX +1 and pickPosY >= thisPosY-1 and pickPosY <= thisPosY +1 then
-            isSelected = true
-        end
-    else
-        for i, enemy in ipairs(enemies) do
-            if pickPosX >= enemies[i][i].posX-1 and pickPosX <= enemies[i][i].posX +1 and pickPosY >= enemies[i][i].posY-1 and pickPosY <= enemies[i][i].posY +1 then
-                isSelected = true
-                chosenEnemyType = i
-            end
-        end
+    --[[ Ganz eventuell muss noch gerundet werden ]]
+    if pickPosX == player.posX and pickPosY == player.posY  then
+        isSelected = true
     end
+  
 end
 
 --[[ Die ALLES Funktion ]]
@@ -166,35 +157,22 @@ function selectAndConfirm()
 
         --[[ Falls ein Spieler bereits "ausgewählt" wurde ]]
         if isSelected then
-            if yourTurn then
-                thisPosX = player.posX
-                thisPosY = player.posY
-            else
-                thisPosX = enemy[chosenEnemyType].posX
-                thisPosY = enemy[chosenEnemyType].posY
-            end
 
             nearEnemy()
             isEmptyFunc()
-            --[[ print(isEmpty, canAttack) ]]
             --[[ das Tile/Feld leer ist und das Bewegungs Limit nicht überschritten wurde]]
-            if isEmpty and moveLimit(thisPosX,thisPosY) and canMove then 
+            if isEmpty and moveLimit(player.posX,player.posY) and canMove then 
                 --[[ bewegt sich die Figur zur Position des Pickers ]]
                 --[[ print("Figur bewegt sich") ]]
-                --[[ hier muss noch gerundet werden ]]
-                if yourTurn then
-                    player.posX = round(pickPosX,2)
-                    player.posY = round(pickPosY,2)
-                else
-                    enemy[chosenEnemyType].posX = round(pickPosX,2)
-                    enemy[chosenEnemyType].posY = round(pickPosY,2)
-                end
+                player.posX = round(pickPosX,2)
+                player.posY = round(pickPosY,2)
+                
                 --[[ Nach der Bewegung wird überprüft ob ein Gegner in der Nähe ist ]]
                 nearEnemy()
                 canMove = false
                 --[[ Zug wird beendet ]]
                 if not canAttack then
-                    if yourTurn then yourTurn = false else yourTurn = true end
+                    yourTurn = false
                     canMove = true
                 else
                     playMenuState = "PopupMenu"
@@ -207,15 +185,18 @@ function selectAndConfirm()
                 --[[ print("ich greife an") ]]
                 isSelected = false
                 if yourTurn then
-                    table.remove(enemy,1)
-                    table.remove(enemies,1)
+                    table.remove(enemy,chosenEnemyType)
+                    table.remove(enemies,chosenEnemyType)
                     print("Der "..chosenEnemyType.."te Gegner wurde deleted")
+                    if #enemies == 0 then
+                        gameState = "Dialogue"
+                    end
                     --[[ enemy[chosenEnemyType].posX = -100000 ]]
                 else
                     playerString = "helena"
                     --[[ player.posX = -10000 ]]
                 end
-                if yourTurn then yourTurn = false else yourTurn = true end
+                yourTurn = false
                 canMove = true
             elseif not isEmpty then
                 --[[ print("Da ist ein Gegnaaaaar") ]]
@@ -238,28 +219,18 @@ function isEmptyFunc()
 
     --[[ Überprüft ob Tile/Feld beim Picker leer ist (kein Gegner oder Terrain) 
         und gibt direkt einen boolean zurück]]
-    if yourTurn then
-        for i, enemy in ipairs(enemies) do
-            if pickPosX >= enemies[i][i].posX -1 and pickPosX <= enemies[i][i].posX +1 and pickPosY >= enemies[i][i].posY -1 and pickPosY <= enemies[i][i].posY +1 then
-                isEmpty = false
-                return
-            else
-                --[[ Debugging:
-                enePickDistX = pickPosX - enemy.posX
-                enePickDistY = pickPosY - enemy.posY
-                print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY) ]]
-                isEmpty = true
-            end
-        end
-    else
-        if pickPosX >= player.posX -1 and pickPosX <= player.posX +1 and pickPosY >= player.posY -1 and pickPosY <= player.posY +1 then
-            --[[ print("Da ist ein Gegner") ]]
+    for i, enemy in ipairs(enemies) do
+        if pickPosX >= enemies[i][i].posX -1 and pickPosX <= enemies[i][i].posX +1 and pickPosY >= enemies[i][i].posY -1 and pickPosY <= enemies[i][i].posY +1 then
             isEmpty = false
+            return
         else
+            --[[ Debugging:
+            enePickDistX = pickPosX - enemy.posX
+            enePickDistY = pickPosY - enemy.posY
+            print("Picker-Gegner Entfernung: ", enePickDistX, enePickDistY) ]]
             isEmpty = true
         end
     end
-
 end
 
 --[[ Funktion zum Testen ob ein Gegner höchstens ein Feld entfernt ist

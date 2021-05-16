@@ -57,7 +57,7 @@ function menu:draw(dt)
     love.graphics.rectangle("fill",0,0,absX,absY)
     love.graphics.setColor(0.6,0.6,0.6)
     love.graphics.print("Main Menu", absX/2, absY/2, 0,3,3) ]]
-	
+	love.graphics.setColor(1,1,1,1)
 	love.graphics.clear()
 	for i = 0, love.graphics.getWidth() / background_menu:getWidth() do
         for j = 0, love.graphics.getHeight() / background_menu:getHeight() do
