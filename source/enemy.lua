@@ -26,11 +26,8 @@ function addEnemy(type,x,y)
   --[[   if type == 1 then ]]
     --[[ enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png") ]]
     enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
-    --[[  elseif type == 2 then
-        enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
-    elseif type == 3 then
-        enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
-    end ]]
+
+    enemy[type].hp = 3
     enemy[type].posX = boardArray[x][y][1]
     enemy[type].posY = boardArray[x][y][2]
     enemy[type].movLimit = 1
@@ -59,8 +56,9 @@ function enemy:update(dt)
             addEnemy(2,5,3)
         end
     end
-    enemyTurn()
-    
+    if not yourTurn then
+        enemyTurn()
+    end
 end
 
 function enemy:draw(dt)
@@ -85,38 +83,41 @@ function enemyTurn()
     if not yourTurn then
         for i, enemy in ipairs(enemies) do
             --[[ Kann der Gegner angreifen? ]]
-            nearPlayer()
+            nearPlayer(i)
             if eneCanAttack then
-                player.posX = -100000 
-                print("Du bist tot")
+                playerGotHit()
+                print("Du verlierst ein Leben")
+                eneCanMove = false
+                eneCanAttack = false
+                yourTurn = true
             end
             if round(player.posX,2) < round(enemy[i].posX,2) then
                 if enemy[i].movLimit > 0 and eneCanMove then
                     enemy[i].posX = enemy[i].posX - blankX
                     thisEneML[i] = thisEneML[i] - 1
                     eneCanMove = false
-                    print("Nummer "..i.." bewegt sich horizontal")
+                    --[[ print("Nummer "..i.." bewegt sich horizontal") ]]
                 end
             elseif round(player.posX,2) > round(enemy[i].posX,2) then
                 if enemy[i].movLimit > 0 and eneCanMove then
                     enemy[i].posX = enemy[i].posX + blankX
                     thisEneML[i] = thisEneML[i] - 1
                     eneCanMove = false
-                    print("Nummer "..i.." bewegt sich horizontal")
+                    --[[ print("Nummer "..i.." bewegt sich horizontal") ]]
                 end
             elseif round(player.posY,2) < round(enemy[i].posY,2) then
                 if enemy[i].movLimit > 0 and eneCanMove then
                     enemy[i].posY = enemy[i].posY - blankY
                     thisEneML[i] = thisEneML[i] - 1
                     eneCanMove = false
-                    print("Nummer "..i.." bewegt sich")
+                    --[[ print("Nummer "..i.." bewegt sich") ]]
                 end
             elseif round(player.posY,2) > round(enemy[i].posY,2) then
                 if enemy[i].movLimit > 0 and eneCanMove then
                     enemy[i].posY = enemy[i].posY + blankY
                     thisEneML[i] = thisEneML[i] - 1
                     eneCanMove = false
-                    print("Nummer "..i.." bewegt sich")
+                    --[[ print("Nummer "..i.." bewegt sich") ]]
                 end
             end
         end
@@ -133,36 +134,34 @@ function round(x,fact)
 end
 
 
-function nearPlayer()
+function nearPlayer(i)
 
-    for i, enemy in ipairs(enemies) do
-        if round(player.posX,2) == round(enemy[i].posX,2) then
-            --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-            if player.posY + blankY >= enemy[i].posY -1 and player.posY + blankY <= enemy[i].posY +1 
-            or player.posY - blankY >= enemy[i].posY -1 and player.posY - blankY <= enemy[i].posY +1 then
-                --[[ print("Gegner nearby") ]]
-                eneCanAttack = true
-                return
-            else
-                eneCanAttack = false
-                print("Spieler ist nicht auf der selben Y-Achse (+/-1)")
-            end
-        
-        --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
-        elseif round(player.posY,2) == round(enemy[i].posY,2) then
-            --[[ print("Auf der gleichen Y-Achse") ]]
-            --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-            if player.posX + blankX >= enemy[i].posX -1 and player.posX + blankX <= enemy[i].posX +1
-            or player.posX - blankX >= enemy[i].posX -1 and player.posX - blankX <= enemy[i].posX +1 then
-                --[[ print("Gegner nearby") ]]
-                eneCanAttack = true
-                return
-            else
-                eneCanAttack = false
-                print("Spieler ist nicht auf der selben X-Achse (+/-1)")
-            end
+    if round(player.posX,2) == round(enemy[i].posX,2) then
+        --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
+        if player.posY + blankY >= enemy[i].posY -1 and player.posY + blankY <= enemy[i].posY +1 
+        or player.posY - blankY >= enemy[i].posY -1 and player.posY - blankY <= enemy[i].posY +1 then
+            --[[ print("Gegner nearby") ]]
+            eneCanAttack = true
+            return
         else
             eneCanAttack = false
+            --[[ print("Spieler ist nicht auf der selben Y-Achse (+/-1)") ]]
         end
+    
+    --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
+    elseif round(player.posY,2) == round(enemy[i].posY,2) then
+        --[[ print("Auf der gleichen Y-Achse") ]]
+        --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
+        if player.posX + blankX >= enemy[i].posX -1 and player.posX + blankX <= enemy[i].posX +1
+        or player.posX - blankX >= enemy[i].posX -1 and player.posX - blankX <= enemy[i].posX +1 then
+            --[[ print("Gegner nearby") ]]
+            eneCanAttack = true
+            return
+        else
+            eneCanAttack = false
+            --[[ print("Spieler ist nicht auf der selben X-Achse (+/-1)") ]]
+        end
+    else
+        eneCanAttack = false
     end
 end

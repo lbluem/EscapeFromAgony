@@ -18,9 +18,11 @@ canAttack = false
 yourTurn = true
 
 chosenEnemyType = 0
-
+--[[ Ob man sich noch bewegen kann ]]
 canMove = true
 
+--[[ Wie oft in der Runde vom Spieler angegriffen wurde ]]
+aCount = 0
 --[[ Infos werden zuerst einmal geladen ]]
 function picker:load()
 
@@ -41,7 +43,7 @@ end
 function picker:update(dt)
 
     --[[ Funktion zur Bewegung des Pickers (siehe unten) ]]
-    if playMenuState ~= "PopupMenu" then
+    if playMenuState ~= "PopupMenu" and playMenuState ~= "ChangeMenu" then
         movePicker()
     end
 
@@ -107,12 +109,12 @@ function movePicker()
         end  
         --[[ "Pause Menu" Taste ]]   
         if key == "escape" then
-            if playMenuState ~= "PopupMenu" then
+            if playMenuState ~= "PopupMenu" and playMenuState ~= "ChangeMenu" then
                 --[[ "Spiel Status" wird auf Pausenmenü geschaltet ]]
                 gameState = "MainMenu"
             end
         end
-        --[[ Reset Button ]]
+        --[[ Reset Button (Nur für Development)]]
         if key == "r" then
             print(#enemies)
             print("hallo 1")
@@ -139,6 +141,15 @@ function movePicker()
             pickPosX = pickerArray[1][1][1]
             pickPosY = pickerArray[1][1][2]
         end
+        --[[ Spielfigur wechseln ]]
+        if key == "c" then
+            print(canMove)
+            if canMove then
+                isSelected = false
+                refreshChars()
+                playMenuState = "ChangeMenu"
+            end
+        end
     end
 end
 
@@ -153,7 +164,7 @@ end
 
 --[[ Die ALLES Funktion ]]
 function selectAndConfirm()
-    if playMenuState ~= "PopupMenu" then
+    if playMenuState ~= "PopupMenu" and playMenuState ~= "ChangeMenu" then
 
         --[[ Falls ein Spieler bereits "ausgewählt" wurde ]]
         if isSelected then
@@ -172,8 +183,8 @@ function selectAndConfirm()
                 canMove = false
                 --[[ Zug wird beendet ]]
                 if not canAttack then
+                    aCount = 0
                     yourTurn = false
-                    canMove = true
                 else
                     playMenuState = "PopupMenu"
                 end
@@ -184,24 +195,27 @@ function selectAndConfirm()
             elseif not isEmpty and canAttack then
                 --[[ print("ich greife an") ]]
                 isSelected = false
-                if yourTurn then
+                if players[playerOnBoard].combo == 1 then
+                    aCount = aCount + 1
+                end             
+                enemy[chosenEnemyType].hp = enemy[chosenEnemyType].hp - 1
+    
+                if enemy[chosenEnemyType].hp <= 0 then
                     table.remove(enemy,chosenEnemyType)
                     table.remove(enemies,chosenEnemyType)
                     print("Der "..chosenEnemyType.."te Gegner wurde deleted")
-                    if #enemies == 0 then
-                        gameState = "Dialogue"
-                    end
-                    --[[ enemy[chosenEnemyType].posX = -100000 ]]
-                else
-                    playerString = "helena"
-                    --[[ player.posX = -10000 ]]
                 end
-                yourTurn = false
-                canMove = true
+                if #enemies == 0 then
+                    gameState = "Dialogue"
+                end
+                if players[playerOnBoard].combo ~= 1 or aCount >= 2 then 
+                    aCount = 0
+                    yourTurn = false
+                end
+                
             elseif not isEmpty then
                 --[[ print("Da ist ein Gegnaaaaar") ]]
             end
-            
         --[[ Falls noch kein Spieler ausgewählt ist 
         (Dies passiert normalerweise zuerst) ]]
         else

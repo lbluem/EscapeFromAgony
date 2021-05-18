@@ -59,7 +59,7 @@ function popupMenu:update(dt)
         if key == "space" or key == "return" then
             chosenOption()
         end
-        if key == "escape" then
+        if key == "escape" or key == "x" then
             playMenuState = "Playing"
         end
     end
@@ -90,6 +90,7 @@ function chosenOption()
         isSelected = true
         playMenuState = "Playing"
     elseif optSelect == 2 then
+        print("Zug beendet")
         if yourTurn then yourTurn = false else yourTurn = true end
             playMenuState = "Playing"
     end
