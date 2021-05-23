@@ -26,14 +26,12 @@ end
 
 function menu:load()
 	love.graphics.setFont(love.graphics.newFont(50))
-	background_menu = love.graphics.newImage("assets/backgrounds/menu_bg.jpg")
+	background_menu = love.graphics.newImage("assets/backgrounds/menu_bg_new.png")
 	sound_bg = love.audio.newSource("assets/sound/Medieval Song Village Consort [No Copyright Music].mp3", "stream")
 	sound_bg:setVolume(0.04)
 	--[[ love.audio.play(sound_bg) ]]
 	
-	
-	
-	mainmenu = menuengine.new(100,  500)
+	mainmenu = menuengine.new(450,  400)
     mainmenu:addEntry("Start Game", start_game)
 	mainmenu:addSep()
     mainmenu:addEntry("Quit Game", quit_game)
@@ -52,18 +50,12 @@ end
 
 function menu:draw(dt)
 
-    --[[ einfachstes Hauptmenü ]]
-    --[[ love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("fill",0,0,absX,absY)
-    love.graphics.setColor(0.6,0.6,0.6)
-    love.graphics.print("Main Menu", absX/2, absY/2, 0,3,3) ]]
 	love.graphics.setColor(1,1,1,1)
 	love.graphics.clear()
-	for i = 0, love.graphics.getWidth() / background_menu:getWidth() do
-        for j = 0, love.graphics.getHeight() / background_menu:getHeight() do
-            love.graphics.draw(background_menu, i * background_menu:getWidth(), j * background_menu:getHeight())
-        end
-    end
+
+	local sx = love.graphics.getWidth() / background_menu:getWidth()
+    local sy = love.graphics.getHeight() / background_menu:getHeight()
+	love.graphics.draw(background_menu, 0, 0, 0, sx, sy)
 
 	mainmenu:draw()
 end
