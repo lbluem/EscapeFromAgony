@@ -46,7 +46,6 @@ function picker:update(dt)
     if playMenuState ~= "PopupMenu" and playMenuState ~= "ChangeMenu" then
         movePicker()
     end
-
 end
 
 function picker:draw(dt)
@@ -211,6 +210,12 @@ function selectAndConfirm()
                 if players[playerOnBoard].combo ~= 1 or aCount >= 2 then 
                     aCount = 0
                     yourTurn = false
+                end
+                nearEnemy()
+                isEmptyFunc()
+                if isEmpty and not canMove then
+                    yourTurn = false
+                    print("ich tue was ich soll")
                 end
                 
             elseif not isEmpty then

@@ -21,6 +21,9 @@ function dialogue:update(dt)
     function love.keypressed(key, scancode, isrepeat)
         if key == "space" then
             dialogue.sequence = dialogue.sequence +1
+            for i, player in ipairs(players) do
+                players[i].hp = 3
+            end
         end
     end
     if dialogue.sequence >= 2 then
