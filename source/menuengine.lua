@@ -224,16 +224,19 @@ function menuengine.new(x, y, font, space)
     function self:update()
         if not self.disabled then
             if KEY.up.pressed then
+		love.audio.stop(sound_menu)
                 KEY.up.pressed = false
                 self:moveCursor(-1)
 		love.audio.play(sound_menu)
             end
             if KEY.down.pressed then
+		love.audio.stop(sound_menu)
                 KEY.down.pressed = false
                 self:moveCursor(1)
 		love.audio.play(sound_menu)
             end
             if KEY.accept.pressed then
+		love.audio.stop(sound_menu)
                 KEY.accept.pressed = false
                 self:_finish()
 		love.audio.play(sound_menu)
@@ -245,8 +248,9 @@ function menuengine.new(x, y, font, space)
                     -- React on Cursor-Position, which needs to collect the Length of every Text-Elements like "normalSelectedBegin", "normalSelectedEnd" etc... TODO: Better readable, please?^^
                     if not self.entries[i].disabled and menuengine.mouse_y > self.entries[i].y and menuengine.mouse_y < self.entries[i].y + self.space and #self.entries[i].text > 0 and
                       menuengine.mouse_x > self.entries[i].x and menuengine.mouse_x < self.entries[i].x + self.entries[i].font:getWidth(self.entries[i].text..self.normalSelectedBegin..self.normalSelectedEnd..self.symbolSelectedEnd) then
-			  if self.cursor ~= i then
-			     love.audio.play(sound_menu)
+			if self.cursor ~= i then
+			    love.audio.stop(sound_menu)
+			    love.audio.play(sound_menu)
                             self.cursor = i
                             if not self.entries[i].disabled and self.entries[i].sndMove ~= nil then
                                 self.entries[i].sndMove:stop()
