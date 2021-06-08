@@ -4,8 +4,8 @@
 --[[ Gamestate ]]
 gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue" ]]
 playMenuState = "Playing" --[[ "Playing", "PopupMenu", "ChangeMenu" ]]
-dialogueState = 1 --[[ Level: 0, 1, 2, 3 ]]
-levelState = 1
+dialogueState = 0 --[[ Dialog: 0, 1, 2, 3 ]]
+levelState = 0  --[[ Level: 0, 1, 2, 3 ]]
 
 --[[ Inhalte die zunächst geladen werden ]]
 function love.load()
@@ -58,6 +58,12 @@ function love.update(dt)
     elseif gameState == "Dialogue" then
         dialogue:update(dt)
     end
+
+    --[[ function love.keypressed(key, scancode, isrepeat)
+        if key == "o" then
+            levelState = 2
+        end
+    end ]]
 end
 
 --[[ Sichtbare Inhalte die mehr als sekündlich 

@@ -15,7 +15,7 @@ menu = {}
 -- Start Game
 local function start_game()
 	--[[ GameState wird auf "Spiel" geändert ]]
-    gameState = "Game"
+    gameState = "Dialogue"
 end
 
 -- Quit Game
@@ -26,7 +26,7 @@ end
 
 function menu:load()
 	love.graphics.setFont(love.graphics.newFont(50))
-	background_menu = love.graphics.newImage("assets/backgrounds/menu_bg_new.png")
+	background_menu = love.graphics.newImage("assets/backgrounds/mainmenu.png")
 	sound_bg = love.audio.newSource("assets/sound/Medieval Song Village Consort [No Copyright Music].mp3", "stream")
 	sound_bg:setVolume(0.04)
 	--[[ love.audio.play(sound_bg) ]]

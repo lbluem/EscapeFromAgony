@@ -100,9 +100,9 @@ function refreshChars()
     table.insert(changePopup,"will")
     table.insert(changePopup,"helena")
 
-    if levelState >= 3 then
+--[[     if levelState >= 3 then
         table.insert(changePopup,"godfired")
-    end
+    end ]]
 
     for i, player in ipairs(changePopup) do
         if changePopup[i] == playerString then

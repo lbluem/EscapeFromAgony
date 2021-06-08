@@ -20,5 +20,7 @@ function background:draw(dt)
         love.graphics.draw(stonyBG, 0,0,0,2.5,1.7)
     elseif levelState == 2 then
         love.graphics.draw(caveBG, 0,0,0,2.5,1.7)
+    elseif levelState == 3 then
+        love.graphics.draw(sandyBG, 0,0,0,2.5,1.7)
     end
 end
