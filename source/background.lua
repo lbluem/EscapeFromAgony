@@ -9,7 +9,7 @@ absY = love.graphics.getHeight() ]]
 
 function background:load()
     caveBG = love.graphics.newImage("assets/backgrounds/cave bg.jpg")
-    stonyBG = love.graphics.newImage("assets/backgrounds/Stony Wall3.png")
+    stonyBG = love.graphics.newImage("assets/backgrounds/Stony Wall.jpg")
     sandyBG = love.graphics.newImage("assets/backgrounds/sand_template_0.jpg")
 end
 
@@ -17,7 +17,7 @@ end
 function background:draw(dt)
     love.graphics.setColor(1,1,1)
     if levelState == 1 then
-        love.graphics.draw(stonyBG, 0,0,0,2.5,1.7)
+        love.graphics.draw(stonyBG, 0,0,0,0.67,0.67)
     elseif levelState == 2 then
         love.graphics.draw(caveBG, 0,0,0,2.5,1.7)
     elseif levelState == 3 then

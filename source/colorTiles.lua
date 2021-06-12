@@ -7,6 +7,8 @@ function colorTiles:load()
     --[[ "klaut" sich das Array aus "playboard.lua" ]]
     colorTilesBoard = boardArray
 
+    tileAdjust = tile.width * 1.08
+
 
 end
 
@@ -30,13 +32,13 @@ function colorTiles:draw(dt)
                         if xDist + yDist <= playMoveLimit then
                             if canMove then
                                 love.graphics.setColor(0,1,0,0.2)
-                                love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tile.width, tile.height)
+                                love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tileAdjust, tileAdjust, 10, 10)
                             end
                             for a, enemy in ipairs(enemies) do
                                 if round(enemies[a][a].posX,2) == round(colorTilesBoard[i][j][1],2)
                                 and round(enemies[a][a].posY,2) == round(colorTilesBoard[i][j][2],2) then
                                     love.graphics.setColor(1,0,0,0.6)
-                                    love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tile.width, tile.height)
+                                    love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tileAdjust, tileAdjust, 10, 10)
                                 end
                             end
                         end
@@ -54,7 +56,7 @@ function colorTiles:draw(dt)
                         xDist = math.floor(math.abs((colorTilesBoard[i][j][1] - enemy[chosenEnemyType].posX) / blankX)*1+.5)/1
                         if xDist + yDist <= playMoveLimit then
                             love.graphics.setColor(1,0,0,0.2)
-                            love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tile.width, tile.height)
+                            love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tileAdjust, tileAdjust)
                         end
                     end
                 end

@@ -18,12 +18,13 @@ for i = 1,5 do
 end
 
 --[[ Startpunkt der Felder ]]
-startX = absX * 0.06
+startX = absX * 0.06 + 150
 startY = absY * 0.10
 
 --[[ Abstand zwischen den Felder ]]
-disX = absX * 0.04
+--[[ disX = absX * 0.04 ]]
 disY = absY * 0.08
+disX = disY
 
 --[[ Abstand der linken oberen Ecken eines Feldes bis zur nächsten ]]
 blankX = tile.width + disX
@@ -33,7 +34,20 @@ blankY = tile.height + disY
     (könnte zu Problemen führen, wenn während der Spielzeit die Fenstergröße angepasst wird) ]]
 function playboard:load()
 
-    tile1 = love.graphics.newImage("assets/tiles/rpgTile093.png")
+    tileTop = love.graphics.newImage("assets/tiles/tile top.png")
+    tileBot = love.graphics.newImage("assets/tiles/tile bot.png")
+    tileMid = love.graphics.newImage("assets/tiles/tile mdl.png")
+
+    tileTopL = love.graphics.newImage("assets/tiles/tile topL.png")
+    tileTopR = love.graphics.newImage("assets/tiles/tile topR.png")
+
+    tileBotL = love.graphics.newImage("assets/tiles/tile botL.png")
+    tileBotR = love.graphics.newImage("assets/tiles/tile botR.png")
+
+    tileLeft = love.graphics.newImage("assets/tiles/tile left.png")
+    tileRight = love.graphics.newImage("assets/tiles/tile right.png")
+
+    currentTile = tileMid
    --[[  love.graphics.setColor(1,1,1) ]]
     for i = 0, 4 do
         for j = 0, 3 do 
@@ -51,8 +65,40 @@ function playboard:draw(dt)
 
     for x = 1,5 do
         for y = 1,4 do
-            love.graphics.draw(tile1,boardArray[x][y][1],boardArray[x][y][2],0,2.9,1.6)
-            --[[ love.graphics.rectangle("fill", boardArray[x][y][1],boardArray[x][y][2], tile.width, tile.height) ]]
+            --[[ Erste Zeile ]]
+            if y == 1 then
+                --[[ oben Links ]]
+                if x == 1 then
+                    currentTile = tileTopL
+                --[[ oben Rechts ]]
+                elseif x == 5 then
+                    currentTile = tileTopR
+                else
+                    currentTile = tileTop
+                end
+            --[[ Letzte Zeile ]]
+            elseif y == 4 then
+                --[[ oben links ]]
+                if x == 1 then
+                    currentTile = tileBotL
+                --[[ unten rechts ]]
+                elseif x == 5 then
+                    currentTile = tileBotR
+                else 
+                    currentTile = tileBot
+                end
+            elseif x == 1 then
+                currentTile = tileLeft
+            elseif x == 5 then
+                currentTile = tileRight
+
+            else
+                currentTile = tileMid
+                --[[ love.graphics.draw(tile1,boardArray[x][y][1],boardArray[x][y][2],0,2.9,1.6) ]]
+                --[[ love.graphics.draw(tileMid,boardArray[x][y][1],boardArray[x][y][2],0,0.85,0.85) ]]
+                --[[ love.graphics.rectangle("fill", boardArray[x][y][1],boardArray[x][y][2], tile.width, tile.height) ]]
+            end
+            love.graphics.draw(currentTile,boardArray[x][y][1],boardArray[x][y][2],0,0.85,0.85)
         end
     end
 end

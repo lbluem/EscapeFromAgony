@@ -14,7 +14,7 @@ playMoveLimit = 2
 
 playerString = "will"
 
-player.lp = 3
+--[[ player.lp = 3 ]]
 
 playerOnBoard = 0
 

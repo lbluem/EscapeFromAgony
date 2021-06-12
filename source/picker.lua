@@ -26,6 +26,7 @@ aCount = 0
 --[[ Infos werden zuerst einmal geladen ]]
 function picker:load()
 
+    pickerImg = love.graphics.newImage("assets/interface/picker.png")
     --[[ Picker bekommt eigenen Array (aus playboard.lua)
     (evtl. überflüssig) ]]
     pickerArray = boardArray
@@ -57,8 +58,10 @@ function picker:draw(dt)
         love.graphics.setColor(0.9,0.9,0.9)
     end
     --[[ Picker wird "gemalt" ]]
-    love.graphics.setLineWidth(5)
-    love.graphics.rectangle("line", pickPosX, pickPosY, picker.width, picker.height)
+    --[[ love.graphics.setLineWidth(5)
+    love.graphics.rectangle("line", pickPosX, pickPosY, picker.width, picker.height) ]]
+    
+    love.graphics.draw(pickerImg, pickPosX, pickPosY, 0, 0.125, 0.13, 65, 65)
 
 end
 
@@ -77,7 +80,9 @@ function movePicker()
         if key == "a" or key == "left" then
             if pickPosX > pickerArray[1][1][1]+1 then
                 pickPosX = round(pickPosX - blankX,2)
-                figureDir = 1
+                if pickPosX < player.posX then
+                    figureDir = 1
+                end
             end
         end
         if key == "s" or key == "down" then
@@ -88,7 +93,9 @@ function movePicker()
         if key == "d" or key == "right" then
             if pickPosX < pickerArray[5][1][1]-1 then
                 pickPosX = round(pickPosX + blankX,2)
-                figureDir = -1
+                if pickPosX >= player.posX then
+                    figureDir = -1
+                end
             end
         end
 
