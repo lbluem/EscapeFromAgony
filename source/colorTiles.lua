@@ -31,7 +31,7 @@ function colorTiles:draw(dt)
                         xDist = math.floor(math.abs((colorTilesBoard[i][j][1] - player.posX) / blankX)*1+.5)/1
                         if xDist + yDist <= playMoveLimit then
                             if canMove then
-                                love.graphics.setColor(0,1,0,0.2)
+                                love.graphics.setColor(0.6,1,0.6,0.3)
                                 love.graphics.rectangle("fill", colorTilesBoard[i][j][1],colorTilesBoard[i][j][2], tileAdjust, tileAdjust, 10, 10)
                             end
                             for a, enemy in ipairs(enemies) do

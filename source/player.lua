@@ -29,7 +29,7 @@ function player:load()
         combo = 1
     }
     helena = {
-        image = love.graphics.newImage("assets/char/tiny Helena.png"),
+        image = love.graphics.newImage("assets/char/tiny Helena wp.png"),
         name = "helena",
         hp = 3,
         aRange = 2,
@@ -47,7 +47,7 @@ function player:load()
     
     --[[ Sprite der Spielerfigur ]]
     player.will = love.graphics.newImage("assets/char/tiny Will.png")
-    player.helena = love.graphics.newImage("assets/char/tiny Helena.png")
+    player.helena = love.graphics.newImage("assets/char/tiny Helena wp.png")
 
 
     --[[ Start Position des Spielers ]]

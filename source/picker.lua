@@ -188,6 +188,7 @@ function selectAndConfirm()
                 --[[ print("Figur bewegt sich") ]]
                 player.posX = round(pickPosX,2)
                 player.posY = round(pickPosY,2)
+                --[[ Hier kommt Bewegungs Sound hin ]]
                 
                 --[[ Nach der Bewegung wird überprüft ob ein Gegner in der Nähe ist ]]
                 nearEnemy(players[playerOnBoard].aRange)
