@@ -25,7 +25,9 @@ function addEnemy(type,x,y)
     enemy[type] = {}
   --[[   if type == 1 then ]]
     --[[ enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png") ]]
-    enemy[type].img = love.graphics.newImage("assets/char/tiny Wache 1.png")
+    enemy[type].img = love.graphics.newImage("assets/char/Wache1/tiny Wache 1.png")
+    enemy[type].img2 = love.graphics.newImage("assets/char/Wache1/tiny Wache 1 b1.png")
+    enemy[type].img3 = love.graphics.newImage("assets/char/Wache1/tiny Wache 1 b2.png")
 
     enemy[type].hp = 3
     enemy[type].posX = boardArray[x][y][1]
@@ -68,7 +70,16 @@ function enemy:draw(dt)
         --[[ if a == 2 then
             love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 150)
         else ]]
-            love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 62.5)
+        if enemy[a].hp == 3 then
+            currentImg = enemy[a].img
+        elseif enemy[a].hp == 2 then
+            currentImg = enemy[a].img2
+        elseif enemy[a].hp == 1 then
+            currentImg = enemy[a].img3
+        end
+        
+        love.graphics.draw(currentImg, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 60, 90)
+        
         --[[ end ]]
     end
 end
