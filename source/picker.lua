@@ -65,6 +65,10 @@ function picker:draw(dt)
 
 end
 
+--[[ Picker Sound ]]
+sound_select = love.audio.newSource("assets/sound/270401__littlerobotsoundfactory__menu-select-00.wav", "stream")
+sound_select:setVolume(0.10)
+
 --[[ Funktion zur Picker Bewegung
     UND weitere Optionen ]]
 function movePicker()
@@ -72,14 +76,17 @@ function movePicker()
     --[[ Bewegung sowohl mit WASD als auch mit Pfeiltasten möglich; 
         wird eingeschränkt um nicht außerhalb des Arrays zu navigieren]]
     function love.keypressed(key, scancode, isrepeat)
+        love.audio.stop(sound_select)
         if key == "w" or key == "up" then
             if pickPosY > pickerArray[1][1][2]+1 then
                 pickPosY = round(pickPosY - blankY,2)
+                love.audio.play(sound_select)
             end
         end
         if key == "a" or key == "left" then
             if pickPosX > pickerArray[1][1][1]+1 then
                 pickPosX = round(pickPosX - blankX,2)
+                love.audio.play(sound_select)
                 if pickPosX < player.posX then
                     figureDir = 1
                 end
@@ -88,11 +95,13 @@ function movePicker()
         if key == "s" or key == "down" then
             if pickPosY < pickerArray[1][4][2]-1 then
                 pickPosY = round(pickPosY + blankY,2)
+                love.audio.play(sound_select)
             end
         end
         if key == "d" or key == "right" then
             if pickPosX < pickerArray[5][1][1]-1 then
                 pickPosX = round(pickPosX + blankX,2)
+                love.audio.play(sound_select)
                 if pickPosX >= player.posX then
                     figureDir = -1
                 end
@@ -216,6 +225,9 @@ function selectAndConfirm()
                     table.remove(enemy,chosenEnemyType)
                     table.remove(enemies,chosenEnemyType)
                     print("Der "..chosenEnemyType.."te Gegner wurde deleted")
+                    sound_die = love.audio.newSource("assets/sound/338145__artordie__scream-ugh.wav", "stream")
+                    sound_die:setVolume(0.04)
+                    love.audio.play(sound_die)
                 end
                 if #enemies == 0 then
                     gameState = "Dialogue"
