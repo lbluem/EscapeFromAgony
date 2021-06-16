@@ -46,7 +46,9 @@ function dialogue:update(dt)
 
         pickPosX = pickerArray[1][1][1]
         pickPosY = pickerArray[1][1][2]
-        levelState = levelState + 1
+        if levelState < 3 then
+            levelState = levelState + 1
+        end
         isSelected = false
         yourTurn = true
         canAttack = false
@@ -62,6 +64,7 @@ function dialogue:draw(dt)
     --[[     love.graphics.setColor(1,0,0)
     love.graphics.rectangle("fill",0,0,absX,absY) ]]
     --[[ if dialogueState == 0 then ]]
+    if levelState ~= 3 then
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(dialogue.will, 400, 250, 0, -0.4,0.4)
         love.graphics.draw(dialogue.helena, 900, 250, 0, 0.4, 0.4)
@@ -71,6 +74,15 @@ function dialogue:draw(dt)
         love.graphics.print("Will", nameFont, 150,(absY/1.5)+15)
         love.graphics.print("Helena", nameFont, 1030,(absY/1.5)+15)
         
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.print("Welcome to the placeholder. Press SPACE (twice) to continue", 150, 50, 0,0.6,0.6)
+    elseif levelstate == 3 then
+        print("DAS ENDE WURDE ERREICHT")
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.print("THE END", 150, 50, 0,0.6,0.6)
+    end
     --[[ end ]]
+
+    
 
 end
