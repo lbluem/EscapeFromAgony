@@ -2,7 +2,7 @@
 
 
 --[[ Gamestate ]]
-gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue" ]]
+gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue", "Tutorial" ]]
 playMenuState = "Playing" --[[ "Playing", "PopupMenu", "ChangeMenu" ]]
 dialogueState = 0 --[[ Dialog: 0, 1, 2, 3 ]]
 levelState = 0  --[[ Level: 0, 1, 2, 3 ]]
@@ -80,6 +80,7 @@ function love.draw()
         tutorial:draw(dt)
     elseif playMenuState ~= "PopupMenu" and playMenuState ~= "ChangeMenu" then
         if gameState == "Dialogue" then
+            background:draw(dt)
             dialogue:draw()
         else 
             background:draw(dt)

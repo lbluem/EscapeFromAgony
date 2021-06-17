@@ -2,7 +2,7 @@
 dialogue = {}
 
 dialogue.speaker = "Helena" --[[ Wer am speaken ist yeah ]]
-dialogue.sequence = 0 --[[ Sätze bekommen Nummern ]]
+dialogue.sequence = 1 --[[ Sätze bekommen Nummern ]]
 
 local nameFont = nil
 
@@ -13,6 +13,14 @@ function dialogue:load()
 
     dialogue.will = love.graphics.newImage("assets/char/Will/Will.png")
     dialogue.helena = love.graphics.newImage("assets/char/Helena/Helena.png")
+
+    dialogue1_ = {}
+
+    for i = 10,1,-1 do
+        dialogue1_[i] = love.graphics.newImage("assets/dialogue/1."..i..".png")
+    end
+
+    dialogue1_[1] = love.graphics.newImage("assets/dialogue/1.1.png")
 
 end
 
@@ -26,7 +34,7 @@ function dialogue:update(dt)
             end
         end
     end
-    if dialogue.sequence >= 2 then
+    if dialogue.sequence > 10 then
 
         --[[ Spielfeld wird wieder normalisiert ]]
         player.posX = boardArray[1][1][1]
@@ -43,6 +51,7 @@ function dialogue:update(dt)
         end
 
         dialogue.sequence = 0
+        dialogueState = dialogueState + 1
 
         pickPosX = pickerArray[1][1][1]
         pickPosY = pickerArray[1][1][2]
@@ -65,7 +74,10 @@ function dialogue:draw(dt)
     love.graphics.rectangle("fill",0,0,absX,absY) ]]
     --[[ if dialogueState == 0 then ]]
     if levelState ~= 3 then
-        love.graphics.setColor(1,1,1,1)
+        if dialogueState == 0 then
+            love.graphics.draw(dialogue1_[dialogue.sequence])
+        end
+        --[[ love.graphics.setColor(1,1,1,1)
         love.graphics.draw(dialogue.will, 400, 250, 0, -0.4,0.4)
         love.graphics.draw(dialogue.helena, 900, 250, 0, 0.4, 0.4)
         love.graphics.setColor(1,1,1,0.4)
@@ -75,7 +87,7 @@ function dialogue:draw(dt)
         love.graphics.print("Helena", nameFont, 1030,(absY/1.5)+15)
         
         love.graphics.setColor(1,1,1,1)
-        love.graphics.print("Welcome to the placeholder. Press SPACE (twice) to continue", 150, 50, 0,0.6,0.6)
+        love.graphics.print("Welcome to the placeholder. Press SPACE (twice) to continue", 150, 50, 0,0.6,0.6) ]]
     elseif levelstate == 3 then
         print("DAS ENDE WURDE ERREICHT")
         love.graphics.setColor(1,1,1,1)
