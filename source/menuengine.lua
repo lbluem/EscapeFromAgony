@@ -15,7 +15,7 @@ menuengine.settings = {
     normalSelectedEnd = "",
     sndMove = nil,
     sndSuccess = nil,
-    mouseDisabled = false,
+    mouseDisabled = true,
 }
 
 

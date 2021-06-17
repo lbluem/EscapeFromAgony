@@ -24,6 +24,7 @@ function love.load()
     require "source/popupMenu"
     require "source/dialogue"
     require "source/changePopup"
+    require "source/tutorial"
 
     --[[ Alle Load Funktionen aus den verschiedenen Dateien
     werden geladen ]]
@@ -37,6 +38,7 @@ function love.load()
     menu:load()
     popupMenu:load()
     changePopup:load()
+    tutorial:load()
 end
 
 --[[ Nicht direkt sichtbare Inhalte 
@@ -57,6 +59,8 @@ function love.update(dt)
         end
     elseif gameState == "Dialogue" then
         dialogue:update(dt)
+    elseif gameState == "Tutorial" then
+        tutorial:update(dt)
     end
 
     --[[ function love.keypressed(key, scancode, isrepeat)
@@ -72,6 +76,8 @@ function love.draw()
 
     if gameState == "MainMenu" then
         menu:draw(dt)
+    elseif gameState == "Tutorial" then
+        tutorial:draw(dt)
     elseif playMenuState ~= "PopupMenu" and playMenuState ~= "ChangeMenu" then
         if gameState == "Dialogue" then
             dialogue:draw()

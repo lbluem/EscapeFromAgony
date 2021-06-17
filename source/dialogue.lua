@@ -11,8 +11,8 @@ function dialogue:load()
 
     nameFont = love.graphics.newFont(50)
 
-    dialogue.will = love.graphics.newImage("assets/char/Will.png")
-    dialogue.helena = love.graphics.newImage("assets/char/Helena.png")
+    dialogue.will = love.graphics.newImage("assets/char/Will/Will.png")
+    dialogue.helena = love.graphics.newImage("assets/char/Helena/Helena.png")
 
 end
 

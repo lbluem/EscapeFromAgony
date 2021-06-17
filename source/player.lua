@@ -16,12 +16,14 @@ playerString = "will"
 
 --[[ player.lp = 3 ]]
 
-playerOnBoard = 0
+playerOnBoard = 1
 
 function player:load()
   
     will = {
-        image = love.graphics.newImage("assets/char/tiny Will.png"),
+        image = love.graphics.newImage("assets/char/Will/tiny Will.png"),
+        image2 = love.graphics.newImage("assets/char/Will/tiny Will b1.png"),
+        image3 = love.graphics.newImage("assets/char/Will/tiny Will b2.png"),
         name = "will",
         hp = 3,
         aRange = 1,
@@ -29,7 +31,9 @@ function player:load()
         combo = 1
     }
     helena = {
-        image = love.graphics.newImage("assets/char/tiny Helena wp.png"),
+        image = love.graphics.newImage("assets/char/Helena/tiny Helena wp.png"),
+        image2 = love.graphics.newImage("assets/char/Helena/tiny Helena b1.png"),
+        image3 = love.graphics.newImage("assets/char/Helena/tiny Helena b2.png"),
         name = "helena",
         hp = 3,
         aRange = 2,
@@ -37,17 +41,13 @@ function player:load()
         combo = 0
     }
     godfired = {
-        image = love.graphics.newImage("assets/char/tiny Helena.png"),
+        image = love.graphics.newImage("assets/char/Helena/tiny Helena.png"),
         name = "godfired",
         hp = 6,
         aRange = 1,
         mRange = 1,
         combo = 0
     }
-    
-    --[[ Sprite der Spielerfigur ]]
-    player.will = love.graphics.newImage("assets/char/tiny Will.png")
-    player.helena = love.graphics.newImage("assets/char/tiny Helena wp.png")
 
 
     --[[ Start Position des Spielers ]]
@@ -80,9 +80,21 @@ function player:draw(dt)
 
     --[[ TODO: Feste Größenwerte müssen durch Variablen ersetzt werden]]
     if playerString == "will" then
-        love.graphics.draw(player.will, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        if players[playerOnBoard].hp == 3 then
+            love.graphics.draw(players[playerOnBoard].image, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        elseif players[playerOnBoard].hp == 2 then
+            love.graphics.draw(players[playerOnBoard].image2, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        elseif players[playerOnBoard].hp == 1 then
+            love.graphics.draw(players[playerOnBoard].image3, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        end
     elseif playerString == "helena" then
-        love.graphics.draw(player.helena, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        if players[playerOnBoard].hp == 3 then
+            love.graphics.draw(players[playerOnBoard].image, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        elseif players[playerOnBoard].hp == 2 then
+            love.graphics.draw(players[playerOnBoard].image2, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        elseif players[playerOnBoard].hp == 1 then
+            love.graphics.draw(players[playerOnBoard].image3, player.posX + figDistX, player.posY + figDistY, 0, playDir,1, 70, 90 )
+        end
     end
 end
 
