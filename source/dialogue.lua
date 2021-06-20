@@ -1,7 +1,7 @@
 
 dialogue = {}
 
-dialogue.speaker = "Helena" --[[ Wer am speaken ist yeah ]]
+--[[ dialogue.speaker = "Helena" ]] --[[ Wer am speaken ist yeah ]]
 dialogue.sequence = 1 --[[ Sätze bekommen Nummern ]]
 
 local nameFont = nil
@@ -14,18 +14,26 @@ function dialogue:load()
     dialogue.will = love.graphics.newImage("assets/char/Will/Will.png")
     dialogue.helena = love.graphics.newImage("assets/char/Helena/Helena.png")
 
-    dialogue1_ = {}
+    dialogueLength = {}
+    dialogueLength[1] = 10
+    dialogueLength[2] = 7
+    dialogueLength[3] = 14
+    dialogueLength[4] = 6
+    dialogues = {}
 
-    for i = 10,1,-1 do
-        dialogue1_[i] = love.graphics.newImage("assets/dialogue/1."..i..".png")
+    for i = 1,4,1 do
+        dialogues[i] = {}
+        for j = 1,dialogueLength[i],1 do
+            dialogues[i][j] = {}
+            dialogues[i][j] = love.graphics.newImage("assets/dialogue/"..i.."/"..i.."."..j..".png")
+        end
     end
-
-    dialogue1_[1] = love.graphics.newImage("assets/dialogue/1.1.png")
 
 end
 
 function dialogue:update(dt)
 
+    print(dialogueState, dialogue.sequence)
     function love.keypressed(key, scancode, isrepeat)
         if key == "space" then
             dialogue.sequence = dialogue.sequence +1
@@ -34,7 +42,7 @@ function dialogue:update(dt)
             end
         end
     end
-    if dialogue.sequence > 10 then
+    if dialogue.sequence > dialogueLength[dialogueState] and levelState <= 3 then
 
         --[[ Spielfeld wird wieder normalisiert ]]
         player.posX = boardArray[1][1][1]
@@ -50,7 +58,7 @@ function dialogue:update(dt)
             addEnemy(2,x2,y2)
         end
 
-        dialogue.sequence = 0
+        dialogue.sequence = 1
         dialogueState = dialogueState + 1
 
         pickPosX = pickerArray[1][1][1]
@@ -74,9 +82,7 @@ function dialogue:draw(dt)
     love.graphics.rectangle("fill",0,0,absX,absY) ]]
     --[[ if dialogueState == 0 then ]]
     if levelState ~= 3 then
-        if dialogueState == 0 then
-            love.graphics.draw(dialogue1_[dialogue.sequence])
-        end
+            love.graphics.draw(dialogues[dialogueState][dialogue.sequence])
         --[[ love.graphics.setColor(1,1,1,1)
         love.graphics.draw(dialogue.will, 400, 250, 0, -0.4,0.4)
         love.graphics.draw(dialogue.helena, 900, 250, 0, 0.4, 0.4)
@@ -94,7 +100,4 @@ function dialogue:draw(dt)
         love.graphics.print("THE END", 150, 50, 0,0.6,0.6)
     end
     --[[ end ]]
-
-    
-
 end

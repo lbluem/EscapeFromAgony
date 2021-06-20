@@ -14,6 +14,10 @@ end
 
 function popupMenu:load()
 
+    menuImg = love.graphics.newImage("assets/interface/menu.png")
+    attackImg = love.graphics.newImage("assets/interface/Angreifen.png")
+    endImg = love.graphics.newImage("assets/interface/Runde_beenden.png")
+
     font = love.graphics.newFont(32)
 
     option_width = absX * 0.3
@@ -67,8 +71,9 @@ end
 
 function popupMenu:draw(dt)
 
-    love.graphics.setColor(0.1,0.1,0.1,0.6)
-    love.graphics.rectangle("fill",option_middleX,option_middleY,option_width,option_height,20)
+    --[[ love.graphics.setColor(0.1,0.1,0.1,0.6) ]]
+    love.graphics.draw(menuImg, option_middleX,option_middleY,0,0.45,0.45)
+    --[[ love.graphics.rectangle("fill",option_middleX,option_middleY,option_width,option_height,20) ]]
     love.graphics.setColor(1,1,1,0.8)
     for i, option in ipairs(popupMenu) do
         textW = font:getWidth(popupMenu[i].text)

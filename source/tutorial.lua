@@ -27,5 +27,5 @@ function tutorial:update(dt)
 end
 
 function tutorial:draw(dt)
-    love.graphics.draw(tutImg[currentTut],0,0,0,0.67,0.67)
+    love.graphics.draw(tutImg[currentTut],0,0,0,0.6667,0.6667)
 end

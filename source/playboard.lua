@@ -18,7 +18,7 @@ for i = 1,5 do
 end
 
 --[[ Startpunkt der Felder ]]
-startX = absX * 0.06 + 150
+startX = absX * 0.06 + 185
 startY = absY * 0.10
 
 --[[ Abstand zwischen den Felder ]]

@@ -4,7 +4,7 @@
 --[[ Gamestate ]]
 gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue", "Tutorial" ]]
 playMenuState = "Playing" --[[ "Playing", "PopupMenu", "ChangeMenu" ]]
-dialogueState = 0 --[[ Dialog: 0, 1, 2, 3 ]]
+dialogueState = 1 --[[ Dialog: 1, 2, 3, 4 ]]
 levelState = 0  --[[ Level: 0, 1, 2, 3 ]]
 
 --[[ Inhalte die zunächst geladen werden ]]

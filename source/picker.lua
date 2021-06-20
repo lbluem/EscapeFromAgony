@@ -230,6 +230,7 @@ function selectAndConfirm()
                     love.audio.play(sound_die)
                 end
                 if #enemies == 0 then
+                    aCount = 0
                     gameState = "Dialogue"
                 end
                 if players[playerOnBoard].combo ~= 1 or aCount >= 2 then 

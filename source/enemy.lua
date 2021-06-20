@@ -6,6 +6,8 @@ enemy = {}
 
 enemies = {}
 
+enemyTimer = 0
+enemyTime = 0.6
 --[[ Parameter ]]
 
 eneCanAttack = false
@@ -59,7 +61,12 @@ function enemy:update(dt)
         end
     end
     if not yourTurn then
-        enemyTurn()
+        enemyTimer = enemyTimer + love.timer.getDelta()
+
+        if enemyTimer >= enemyTime then
+            enemyTurn()
+            enemyTimer = 0
+        end
     end
 end
 
