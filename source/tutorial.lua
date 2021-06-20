@@ -19,7 +19,7 @@ function tutorial:update(dt)
             if currentTut == 1 then
                 currentTut = currentTut + 1
             else
-                currentTut = 0
+                currentTut = 1
                 gameState = "MainMenu"
             end
         end

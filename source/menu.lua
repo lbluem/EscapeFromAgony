@@ -15,7 +15,11 @@ menu = {}
 -- Start Game
 local function start_game()
 	--[[ GameState wird auf "Spiel" geändert ]]
-    gameState = "Dialogue"
+	if levelState == 0 then
+		gameState = "Dialogue"
+	else
+		gameState = "Game"
+	end
 end
 
 -- Tutorial
