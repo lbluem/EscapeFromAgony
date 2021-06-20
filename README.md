@@ -1,4 +1,4 @@
-# projectNull
+# Escape From Agony
 
 Ein Studenten-Projekt aus dem dritten Semester in Media Systems aus dem Fach Media/Game Design 3.
 
