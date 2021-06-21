@@ -8,6 +8,8 @@ enemies = {}
 
 enemyTimer = 0
 enemyTime = 0.6
+
+goXY = 1 --[[ Random int ob Gegner zuerst auf X oder Y Achse verfolgt]]
 --[[ Parameter ]]
 
 eneCanAttack = false
@@ -27,9 +29,9 @@ function addEnemy(type,x,y)
     enemy[type] = {}
   --[[   if type == 1 then ]]
     --[[ enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png") ]]
-    enemy[type].img = love.graphics.newImage("assets/char/Wache1/tiny Wache 1.png")
-    enemy[type].img2 = love.graphics.newImage("assets/char/Wache1/tiny Wache 1 b1.png")
-    enemy[type].img3 = love.graphics.newImage("assets/char/Wache1/tiny Wache 1 b2.png")
+    enemy[type].img = love.graphics.newImage("assets/char/Wache"..type.."/tiny Wache"..type..".png")
+    enemy[type].img2 = love.graphics.newImage("assets/char/Wache"..type.."/tiny Wache"..type.." b1.png")
+    enemy[type].img3 = love.graphics.newImage("assets/char/Wache"..type.."/tiny Wache"..type.." b2.png")
 
     enemy[type].hp = 3
     enemy[type].posX = boardArray[x][y][1]
@@ -47,7 +49,7 @@ function enemy:load()
     --[[     enemy.posX = boardArray[4][3][1]
     enemy.posY = boardArray[4][3][2] ]]
     addEnemy(1,4,4)
-    addEnemy(2,5,3)
+    addEnemy(3,2,3)
     --[[ print(enemies[2].posX) ]]
 end
 
@@ -55,7 +57,6 @@ end
 function enemy:update(dt)
     function love.keypressed(key, scancode, isrepeat)
         if key == "r" then
-            print("hallo 2")
             addEnemy(1,4,4)
             addEnemy(2,5,3)
         end
@@ -109,35 +110,13 @@ function enemyTurn()
                 eneCanAttack = false
                 yourTurn = true
             end
-            if round(player.posX,2) < round(enemy[i].posX,2) then
-                if enemy[i].movLimit > 0 and eneCanMove then
-                    enemy[i].posX = enemy[i].posX - blankX
-                    thisEneML[i] = thisEneML[i] - 1
-                    eneCanMove = false
-                    --[[ print("Nummer "..i.." bewegt sich horizontal") ]]
-                end
-            elseif round(player.posX,2) > round(enemy[i].posX,2) then
-                if enemy[i].movLimit > 0 and eneCanMove then
-                    enemy[i].posX = enemy[i].posX + blankX
-                    thisEneML[i] = thisEneML[i] - 1
-                    eneCanMove = false
-                    --[[ print("Nummer "..i.." bewegt sich horizontal") ]]
-                end
-            elseif round(player.posY,2) < round(enemy[i].posY,2) then
-                if enemy[i].movLimit > 0 and eneCanMove then
-                    enemy[i].posY = enemy[i].posY - blankY
-                    thisEneML[i] = thisEneML[i] - 1
-                    eneCanMove = false
-                    --[[ print("Nummer "..i.." bewegt sich") ]]
-                end
-            elseif round(player.posY,2) > round(enemy[i].posY,2) then
-                if enemy[i].movLimit > 0 and eneCanMove then
-                    enemy[i].posY = enemy[i].posY + blankY
-                    thisEneML[i] = thisEneML[i] - 1
-                    eneCanMove = false
-                    --[[ print("Nummer "..i.." bewegt sich") ]]
-                end
-            end
+            if love.math.random(1,2) == 1 then
+                xMove(i)
+                yMove(i)
+            else
+                yMove(i)
+                xMove(i)
+            end            
         end
     end
     table.remove(thisEneML)
@@ -145,6 +124,52 @@ function enemyTurn()
     eneCanMove = true
     canMove = true
 end
+
+function xMove(i)
+    if round(player.posX,2) < round(enemy[i].posX,2) then
+        if enemy[i].movLimit > 0 and eneCanMove then
+            if not friendlyEnemyThere(i,round(enemy[i].posX - blankX,2),enemy[i].posY) then
+                enemy[i].posX = round(enemy[i].posX - blankX,2)
+                thisEneML[i] = thisEneML[i] - 1
+                eneCanMove = false
+                --[[ print("Nummer "..i.." bewegt sich horizontal") ]]
+            end
+        end
+    elseif round(player.posX,2) > round(enemy[i].posX,2) then
+        if enemy[i].movLimit > 0 and eneCanMove then
+            if not friendlyEnemyThere(i,round(enemy[i].posX + blankX,2), enemy[i].posY) then
+                enemy[i].posX = round(enemy[i].posX + blankX,2)
+                thisEneML[i] = thisEneML[i] - 1
+                eneCanMove = false
+                --[[ print("Nummer "..i.." bewegt sich horizontal") ]]
+            end
+        end
+    end
+end
+
+function yMove(i)
+
+    if round(player.posY,2) < round(enemy[i].posY,2) then
+        if enemy[i].movLimit > 0 and eneCanMove then
+            if not friendlyEnemyThere(i, enemy[i].posX,round(enemy[i].posY - blankY,2)) then
+                enemy[i].posY = round(enemy[i].posY - blankY,2)
+                thisEneML[i] = thisEneML[i] - 1
+                eneCanMove = false
+                --[[ print("Nummer "..i.." bewegt sich") ]]
+            end
+        end
+    elseif round(player.posY,2) > round(enemy[i].posY,2) then
+        if enemy[i].movLimit > 0 and eneCanMove then
+            if not friendlyEnemyThere(i, enemy[i].posX,round(enemy[i].posY + blankY,2)) then
+                enemy[i].posY = round(enemy[i].posY + blankY,2)
+                thisEneML[i] = thisEneML[i] - 1
+                eneCanMove = false
+                --[[ print("Nummer "..i.." bewegt sich") ]]
+            end
+        end
+    end
+end
+
 
 
 function round(x,fact)
@@ -182,4 +207,18 @@ function nearPlayer(i)
     else
         eneCanAttack = false
     end
+end
+
+function friendlyEnemyThere(MeEnemy,toX,toY)
+
+    print("Der "..MeEnemy.."te Gegner geht an Position:"..toX, toY.."!")
+    for i, enemy in ipairs(enemies) do
+        print(enemy[i].posX,enemy[i].posY.."sind schon besetzt")
+        if round(toX,2) == round(enemy[i].posX,2) and
+        round(toY,2) == round(enemy[i].posY,2) then 
+            print("Dort ist aber schon ein anderer Gegner")
+            return true
+        end
+    end
+    return false
 end

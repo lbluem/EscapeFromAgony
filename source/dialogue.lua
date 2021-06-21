@@ -32,8 +32,6 @@ function dialogue:load()
 end
 
 function dialogue:update(dt)
-
-    print(dialogueState, dialogue.sequence)
     function love.keypressed(key, scancode, isrepeat)
         if key == "space" then
             dialogue.sequence = dialogue.sequence +1
@@ -51,11 +49,13 @@ function dialogue:update(dt)
             x1 = love.math.random(3,5)
             y1 = love.math.random(2,4)
             addEnemy(1,x1,y1)
-            repeat
-                x2 = love.math.random(3,5)
-                y2 = love.math.random(2,4)
-            until x1 ~= x2 and y1 ~= y2
-            addEnemy(2,x2,y2)
+            if levelState ~= 1 then
+                repeat
+                    x2 = love.math.random(3,5)
+                    y2 = love.math.random(2,4)
+                until x1 ~= x2 and y1 ~= y2
+                addEnemy(3,x2,y2)
+            end
         end
 
         dialogue.sequence = 1

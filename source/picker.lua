@@ -146,7 +146,7 @@ function movePicker()
                     x2 = love.math.random(3,5)
                     y2 = love.math.random(2,4)
                 until x1 ~= x2 and y1 ~= y2
-                addEnemy(2,x2,y2)
+                addEnemy(3,x2,y2)
             end
             pickPosX = pickerArray[1][1][1]
             pickPosY = pickerArray[1][1][2]
