@@ -3,7 +3,7 @@
 
 --[[ Gamestate ]]
 gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue", "Tutorial" ]]
-playMenuState = "Playing" --[[ "Playing", "PopupMenu", "ChangeMenu" ]]
+playMenuState = "Playing" --[[ "Playing", "PopupMenu", "ChangeMenu", "Game Over" ]]
 dialogueState = 1 --[[ Dialog: 1, 2, 3, 4 ]]
 levelState = 0  --[[ Level: 0, 1, 2, 3 ]]
 

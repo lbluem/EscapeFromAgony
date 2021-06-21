@@ -219,9 +219,9 @@ function selectAndConfirm()
                 if players[playerOnBoard].combo == 1 then
                     aCount = aCount + 1
                 end             
-                enemy[chosenEnemyType].hp = enemy[chosenEnemyType].hp - 1
+                enemies[chosenEnemyType].hp = enemies[chosenEnemyType].hp - 1
     
-                if enemy[chosenEnemyType].hp <= 0 then
+                if enemies[chosenEnemyType].hp <= 0 then
                     table.remove(enemy,chosenEnemyType)
                     table.remove(enemies,chosenEnemyType)
                     print("Der "..chosenEnemyType.."te Gegner wurde deleted")
@@ -272,7 +272,7 @@ function isEmptyFunc()
     --[[ Überprüft ob Tile/Feld beim Picker leer ist (kein Gegner oder Terrain) 
         und gibt direkt einen boolean zurück]]
     for i, enemy in ipairs(enemies) do
-        if pickPosX >= enemies[i][i].posX -1 and pickPosX <= enemies[i][i].posX +1 and pickPosY >= enemies[i][i].posY -1 and pickPosY <= enemies[i][i].posY +1 then
+        if pickPosX >= enemy.posX -1 and pickPosX <= enemy.posX +1 and pickPosY >= enemy.posY -1 and pickPosY <= enemy.posY +1 then
             isEmpty = false
             return
         else
@@ -293,10 +293,10 @@ function nearEnemy(atkRange)
 
     for i, enemy in ipairs(enemies) do
         --[[ Wenn Figur-Position auf gleicher Breite (X-Achse) wie der Gegner ist ]]
-        if round(player.posX,2) == round(enemy[i].posX,2) then
+        if round(player.posX,2) == round(enemy.posX,2) then
             --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-            if round(player.posY + (blankY*atkRange),2) >= round(enemies[i][i].posY,2) 
-            and round(player.posY - (blankY*atkRange),2) <= round(enemies[i][i].posY,2) then
+            if round(player.posY + (blankY*atkRange),2) >= round(enemy.posY,2) 
+            and round(player.posY - (blankY*atkRange),2) <= round(enemy.posY,2) then
                 --[[ print("Gegner nearby") ]]
                 chosenEnemyType = i
                 canAttack = true
@@ -306,11 +306,11 @@ function nearEnemy(atkRange)
             end
         
         --[[ Wenn Figur-Position auf gleicher Höhe (Y-Achse) wie der Gegner ist ]]
-        elseif round(player.posY,2) == round(enemy[i].posY,2) then
+        elseif round(player.posY,2) == round(enemy.posY,2) then
             --[[ print("Auf der gleichen Y-Achse") ]]
             --[[ und dann Gegner nicht mehr als ein Tile/Feld entfernt ist kann angegriffen werden ]]
-            if round(player.posX + (blankX*atkRange),2) >= round(enemies[i][i].posX,2)
-            and round(player.posX - (blankX*atkRange),2) <= round(enemies[i][i].posX,2) then
+            if round(player.posX + (blankX*atkRange),2) >= round(enemy.posX,2)
+            and round(player.posX - (blankX*atkRange),2) <= round(enemy.posX,2) then
                 --[[ print("Gegner nearby") ]]
                 chosenEnemyType = i
                 canAttack = true
