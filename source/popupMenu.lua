@@ -69,21 +69,28 @@ function popupMenu:update(dt)
     end
 end
 
+image_attack = love.graphics.newImage("assets/interface/Angreifen.png")
+image_do_nothing = love.graphics.newImage("assets/interface/Runde_beenden.png")
+
 function popupMenu:draw(dt)
 
     --[[ love.graphics.setColor(0.1,0.1,0.1,0.6) ]]
-    love.graphics.draw(menuImg, option_middleX,option_middleY,0,0.45,0.45)
+    love.graphics.draw(menuImg, option_middleX + 30, option_middleY,0,0.45,0.45)
     --[[ love.graphics.rectangle("fill",option_middleX,option_middleY,option_width,option_height,20) ]]
     love.graphics.setColor(1,1,1,0.8)
     for i, option in ipairs(popupMenu) do
-        textW = font:getWidth(popupMenu[i].text)
+        --[[ textW = font:getWidth(popupMenu[i].text) ]]
         textH = font:getHeight(popupMenu[i].text)
+        textW = 100
+        --[[ textH = 40 ]]
         font_middleX = option_middleX + option_width/2 - textW/2
         font_middleY = (option_middleY + option_height/2 - textH/2) - 20
         if optSelect == i then
-            love.graphics.print(">"..popupMenu[i].text.."<",font,font_middleX,font_middleY + ((i-1)*50))
+            love.graphics.print(">                  <", font, font_middleX - 62, font_middleY + ((i-1)*50))
+            love.graphics.draw(image_attack, absX/2 - 95, absY/2 - 50, 0, 0.5, 0.5)
+            love.graphics.draw(image_do_nothing, absX/2 - 95, absY/2 + 10, 0, 0.5, 0.5)
         else
-            love.graphics.print(popupMenu[i].text,font,font_middleX,font_middleY + ((i-1)*50))
+            love.graphics.print("                    ", font, font_middleX - 62, font_middleY + ((i-1)*50))
         end
     end
 end
