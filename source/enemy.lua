@@ -27,11 +27,13 @@ function addEnemy(type,x,y)
     --[[ Der Typ könnte statt einer Zahl der Name, also ein String sein (z.B. "Wache1")
     was die Übersicht vereinfachen würde ]]
     enemy[type] = {}
-  --[[   if type == 1 then ]]
-    --[[ enemy[type].img = love.graphics.newImage("assets/char/tiny Wache "..type..".png") ]]
     enemy[type].img = love.graphics.newImage("assets/char/Wache"..type.."/tiny Wache"..type..".png")
     enemy[type].img2 = love.graphics.newImage("assets/char/Wache"..type.."/tiny Wache"..type.." b1.png")
     enemy[type].img3 = love.graphics.newImage("assets/char/Wache"..type.."/tiny Wache"..type.." b2.png")
+
+   --[[  enemy[type].img = love.graphics.newImage("assets/char/Wache1/tiny Wache1.png")
+    enemy[type].img2 = love.graphics.newImage("assets/char/Wache1/tiny Wache1 b1.png")
+    enemy[type].img3 = love.graphics.newImage("assets/char/Wache1/tiny Wache1 b2.png") ]]
 
     enemy[type].hp = 3
     enemy[type].posX = boardArray[x][y][1]
@@ -49,7 +51,7 @@ function enemy:load()
     --[[     enemy.posX = boardArray[4][3][1]
     enemy.posY = boardArray[4][3][2] ]]
     addEnemy(1,4,4)
-    addEnemy(3,2,3)
+    --[[ addEnemy(3,2,3) ]]
     --[[ print(enemies[2].posX) ]]
 end
 
@@ -75,9 +77,7 @@ function enemy:draw(dt)
     --[[ Gegner wird "gemalt" ]]
     love.graphics.setColor(1,1,1,1)
     for a, enemy in ipairs(enemies) do
-        --[[ if a == 2 then
-            love.graphics.draw(enemy[a].img, enemy[a].posX + eneDistX, enemy[a].posY + eneDistY, 0, -1, 1, 62.5, 150)
-        else ]]
+        print(enemy[a].hp)
         if enemy[a].hp == 3 then
             currentImg = enemy[a].img
         elseif enemy[a].hp == 2 then
