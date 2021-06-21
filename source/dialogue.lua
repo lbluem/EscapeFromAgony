@@ -35,6 +35,11 @@ function dialogue:update(dt)
     function love.keypressed(key, scancode, isrepeat)
         if key == "space" then
             dialogue.sequence = dialogue.sequence +1
+
+            sound_click = love.audio.newSource("assets/sound/342200__christopherderp__videogame-menu-button-click.wav", "stream")
+            sound_click:setVolume(0.18)
+            love.audio.play(sound_click)
+
             for i, player in ipairs(players) do
                 players[i].hp = 3
             end

@@ -225,9 +225,15 @@ function selectAndConfirm()
                     table.remove(enemy,chosenEnemyType)
                     table.remove(enemies,chosenEnemyType)
                     print("Der "..chosenEnemyType.."te Gegner wurde deleted")
+                    --[[ Enemy Death Sound ]]
                     sound_die = love.audio.newSource("assets/sound/338145__artordie__scream-ugh.wav", "stream")
-                    sound_die:setVolume(0.04)
+                    sound_die:setVolume(0.18)
                     love.audio.play(sound_die)
+                else
+                    --[[ Enemy Hit Sound ]]
+                    sound_hit = love.audio.newSource("assets/sound/434462__dersuperanton__getting-hit-hugh.wav", "stream")
+                    sound_hit:setVolume(0.18)
+                    love.audio.play(sound_hit)
                 end
                 if #enemies == 0 then
                     aCount = 0
