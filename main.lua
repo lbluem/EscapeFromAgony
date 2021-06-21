@@ -2,8 +2,8 @@
 
 
 --[[ Gamestate ]]
-gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue", "Tutorial" ]]
-playMenuState = "Playing" --[[ "Playing", "PopupMenu", "ChangeMenu", "Game Over" ]]
+gameState = "MainMenu" --[[ "MainMenu", "Game", "Dialogue", "Tutorial",  "GameOver" ]]
+playMenuState = "Playing" --[[ "Playing", "PopupMenu", "ChangeMenu" ]]
 dialogueState = 1 --[[ Dialog: 1, 2, 3, 4 ]]
 levelState = 0  --[[ Level: 0, 1, 2, 3 ]]
 
@@ -25,6 +25,7 @@ function love.load()
     require "source/dialogue"
     require "source/changePopup"
     require "source/tutorial"
+    require "source/gameover"
 
     --[[ Alle Load Funktionen aus den verschiedenen Dateien
     werden geladen ]]
@@ -39,6 +40,7 @@ function love.load()
     popupMenu:load()
     changePopup:load()
     tutorial:load()
+    gameover:load()
 end
 
 --[[ Nicht direkt sichtbare Inhalte 
@@ -61,6 +63,8 @@ function love.update(dt)
         dialogue:update(dt)
     elseif gameState == "Tutorial" then
         tutorial:update(dt)
+    elseif gameState == "GameOver" then
+        gameover:update(dt)
     end
 
     --[[ function love.keypressed(key, scancode, isrepeat)
@@ -78,6 +82,8 @@ function love.draw()
         menu:draw(dt)
     elseif gameState == "Tutorial" then
         tutorial:draw(dt)
+    elseif gameState == "GameOver" then
+        gameover:draw(dt)
     elseif playMenuState ~= "PopupMenu" and playMenuState ~= "ChangeMenu" then
         if gameState == "Dialogue" then
             background:draw(dt)
@@ -91,14 +97,14 @@ function love.draw()
             player:draw(dt)
         end
     end
-    if playMenuState == "PopupMenu" then
+    if playMenuState == "PopupMenu" and gameState ~= "GameOver" then
         background:draw(dt)
         playboard:draw(dt)
         enemy:draw(dt)
         player:draw(dt)
         popupMenu:draw(dt)
     end
-    if playMenuState == "ChangeMenu" then
+    if playMenuState == "ChangeMenu" and gameState ~= "GameOver" then
         background:draw(dt)
         playboard:draw(dt)
         enemy:draw(dt)

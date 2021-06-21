@@ -119,7 +119,7 @@ function enemyTurn()
             nearPlayer(enemy)
             if eneCanAttack then
                 playerGotHit()
-                print("Du verlierst ein Leben")
+                --[[ print("Du verlierst ein Leben") ]]
                 eneCanMove = false
                 eneCanAttack = false
                 yourTurn = true

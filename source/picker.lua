@@ -130,7 +130,7 @@ function movePicker()
             end
         end
         --[[ Reset Button (Nur für Development)]]
-        if key == "r" then
+        --[[ if key == "r" then
             print(#enemies)
             isSelected = false
             yourTurn = true
@@ -150,7 +150,7 @@ function movePicker()
             end
             pickPosX = pickerArray[1][1][1]
             pickPosY = pickerArray[1][1][2]
-        end
+        end ]]
         --[[ Spielfigur wechseln ]]
         if key == "c" then
             print(canMove)
@@ -161,7 +161,7 @@ function movePicker()
             end
         end
 
-        if key == "1" then
+        --[[ if key == "1" then
             levelState = 1
         end
         if key == "2" then
@@ -169,7 +169,7 @@ function movePicker()
         end
         if key == "3" then
             levelState = 3
-        end
+        end ]]
     end
 end
 
@@ -237,6 +237,7 @@ function selectAndConfirm()
                 end
                 if #enemies == 0 then
                     aCount = 0
+                    dialogueState = dialogueState +1
                     gameState = "Dialogue"
                 end
                 if players[playerOnBoard].combo ~= 1 or aCount >= 2 then 

@@ -16,11 +16,11 @@ end
 
 function background:draw(dt)
     love.graphics.setColor(1,1,1)
-    if levelState <= 1 then
+    if dialogueState == 1 then
         love.graphics.draw(stonyBG, 0,0,0,0.67,0.67)
-    elseif levelState == 2 then
+    elseif dialogueState == 2 then
         love.graphics.draw(forestBG, 0,0,0,1.4,1.4)
-    elseif levelState == 3 then
+    elseif dialogueState >= 3 then
         love.graphics.draw(sandyBG, 0,0,0,2.5,1.7)
     end
 end

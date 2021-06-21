@@ -14,6 +14,8 @@ function dialogue:load()
     dialogue.will = love.graphics.newImage("assets/char/Will/Will.png")
     dialogue.helena = love.graphics.newImage("assets/char/Helena/Helena.png")
 
+    gameOver = love.graphics.newImage("assets/interface/Game Over.png")
+
     dialogueLength = {}
     dialogueLength[1] = 10
     dialogueLength[2] = 7
@@ -43,10 +45,11 @@ function dialogue:update(dt)
             for i, player in ipairs(players) do
                 players[i].hp = 3
             end
+        elseif key == "escape" then
+            gameState = "MainMenu"
         end
     end
-    if dialogue.sequence > dialogueLength[dialogueState] and levelState <= 3 then
-
+    if dialogue.sequence > dialogueLength[dialogueState] and levelState <= 2 then
         --[[ Spielfeld wird wieder normalisiert ]]
         player.posX = boardArray[1][1][1]
         player.posY = boardArray[1][1][2]
@@ -72,7 +75,6 @@ function dialogue:update(dt)
         end
 
         dialogue.sequence = 1
-        dialogueState = dialogueState + 1
 
         pickPosX = pickerArray[1][1][1]
         pickPosY = pickerArray[1][1][2]
@@ -84,33 +86,22 @@ function dialogue:update(dt)
         canAttack = false
         canMove = true
         gameState = "Game"
-
-
+        print("Kommendes Level wurde vorbereitet")
+    
     end
 end
 
 function dialogue:draw(dt)
 
-    --[[     love.graphics.setColor(1,0,0)
-    love.graphics.rectangle("fill",0,0,absX,absY) ]]
-    --[[ if dialogueState == 0 then ]]
-    if levelState ~= 3 then
+    if levelState <= 3 then
+            
+        if dialogue.sequence <= dialogueLength[dialogueState] then
             love.graphics.draw(dialogues[dialogueState][dialogue.sequence])
-        --[[ love.graphics.setColor(1,1,1,1)
-        love.graphics.draw(dialogue.will, 400, 250, 0, -0.4,0.4)
-        love.graphics.draw(dialogue.helena, 900, 250, 0, 0.4, 0.4)
-        love.graphics.setColor(1,1,1,0.4)
-        love.graphics.rectangle("fill",0,absY/1.5,absX,absY)
-        love.graphics.setColor(0,0,0,0.85)
-        love.graphics.print("Will", nameFont, 150,(absY/1.5)+15)
-        love.graphics.print("Helena", nameFont, 1030,(absY/1.5)+15)
-        
-        love.graphics.setColor(1,1,1,1)
-        love.graphics.print("Welcome to the placeholder. Press SPACE (twice) to continue", 150, 50, 0,0.6,0.6) ]]
-    elseif levelstate == 3 then
-        print("DAS ENDE WURDE ERREICHT")
-        love.graphics.setColor(1,1,1,1)
-        love.graphics.print("THE END", 150, 50, 0,0.6,0.6)
+        else
+            gameState = "GameOver"
+            --[[ love.graphics.draw(gameOver)
+            levelState = 0
+            dialogueState = 1 ]]
+        end
     end
-    --[[ end ]]
 end

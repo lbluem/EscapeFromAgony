@@ -6,7 +6,7 @@ player = {}
 
 players = {}
 
-
+dead = 0
 --[[ Spieler Direction ]]
 
 --[[ Wie weit kann sich der Spieler bewegen ]]
@@ -133,6 +133,17 @@ function playerGotHit()
     end
 
     if players[playerOnBoard].hp <= 0 then
+        print("Ich gucke ob alle tot sind")
+        for i, player in ipairs(players) do
+            if player.hp <= 0 then
+                dead = dead + 1
+            end
+        end
+        if dead >= 2 then
+            print("Es sind alle Spieler tot")
+            gameState = "GameOver"
+        end
+        
 
         if playerString == "will" then
             sound_die = love.audio.newSource("assets/sound/338145__artordie__scream-ugh.wav", "stream")
@@ -143,9 +154,11 @@ function playerGotHit()
             sound_die_female:setVolume(0.42)
             love.audio.play(sound_die_female)
         end
-
-
+        
         refreshChars()
-        playMenuState = "ChangeMenu"
+        if dead ~= 0 then
+            playMenuState = "ChangeMenu"
+        end
+        dead = 0
     end
 end
