@@ -45,8 +45,8 @@ function dialogue:update(dt)
             for i, player in ipairs(players) do
                 players[i].hp = 3
             end
-        elseif key == "escape" then
-            gameState = "MainMenu"
+        --[[ elseif key == "escape" then
+            gameState = "MainMenu" ]]
         end
     end
     if dialogue.sequence > dialogueLength[dialogueState] and levelState <= 2 then
@@ -86,7 +86,7 @@ function dialogue:update(dt)
         canAttack = false
         canMove = true
         gameState = "Game"
-        print("Kommendes Level wurde vorbereitet")
+        --[[ print("Kommendes Level wurde vorbereitet") ]]
     
     end
 end

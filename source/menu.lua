@@ -48,7 +48,7 @@ function menu:load()
 	background_menu = love.graphics.newImage("assets/backgrounds/mainmenu2.jpg")
 	sound_bg = love.audio.newSource("assets/sound/Medieval Song Village Consort [No Copyright Music].mp3", "stream")
 	sound_bg:setVolume(0.04)
-	--[[ love.audio.play(sound_bg) ]]
+	love.audio.play(sound_bg)
 	
 	mainmenu = menuengine.new(485,  325)
     mainmenu:addEntry("StartG am", start_game)

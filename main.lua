@@ -97,14 +97,14 @@ function love.draw()
             player:draw(dt)
         end
     end
-    if playMenuState == "PopupMenu" and gameState ~= "GameOver" then
+    if playMenuState == "PopupMenu" then
         background:draw(dt)
         playboard:draw(dt)
         enemy:draw(dt)
         player:draw(dt)
         popupMenu:draw(dt)
     end
-    if playMenuState == "ChangeMenu" and gameState ~= "GameOver" then
+    if playMenuState == "ChangeMenu" then
         background:draw(dt)
         playboard:draw(dt)
         enemy:draw(dt)

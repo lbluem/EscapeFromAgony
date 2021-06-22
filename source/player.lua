@@ -133,15 +133,20 @@ function playerGotHit()
     end
 
     if players[playerOnBoard].hp <= 0 then
-        print("Ich gucke ob alle tot sind")
+        --[[ print("Ich gucke ob alle tot sind") ]]
         for i, player in ipairs(players) do
             if player.hp <= 0 then
                 dead = dead + 1
             end
         end
         if dead >= 2 then
-            print("Es sind alle Spieler tot")
+            playMenuState = "Playing"
+            --[[ print("Es sind alle Spieler tot") ]]
             gameState = "GameOver"
+            dead = 0
+        else
+            playMenuState = "ChangeMenu"
+            dead = 0
         end
         
 
@@ -156,9 +161,5 @@ function playerGotHit()
         end
         
         refreshChars()
-        if dead ~= 0 then
-            playMenuState = "ChangeMenu"
-        end
-        dead = 0
     end
 end

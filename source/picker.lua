@@ -201,6 +201,7 @@ function selectAndConfirm()
                 
                 --[[ Nach der Bewegung wird überprüft ob ein Gegner in der Nähe ist ]]
                 nearEnemy(players[playerOnBoard].aRange)
+                chooseEnemy()
                 canMove = false
                 --[[ Zug wird beendet ]]
                 if not canAttack then
@@ -218,13 +219,14 @@ function selectAndConfirm()
                 
                 if players[playerOnBoard].combo == 1 then
                     aCount = aCount + 1
-                end             
+                end   
+                chooseEnemy()          
                 enemies[chosenEnemyType].hp = enemies[chosenEnemyType].hp - 1
     
                 if enemies[chosenEnemyType].hp <= 0 then
                     table.remove(enemy,chosenEnemyType)
                     table.remove(enemies,chosenEnemyType)
-                    print("Der "..chosenEnemyType.."te Gegner wurde deleted")
+                    --[[ print("Der "..chosenEnemyType.."te Gegner wurde deleted") ]]
                     --[[ Enemy Death Sound ]]
                     sound_die = love.audio.newSource("assets/sound/338145__artordie__scream-ugh.wav", "stream")
                     sound_die:setVolume(0.18)
@@ -246,10 +248,11 @@ function selectAndConfirm()
                     isSelected = false
                 end
                 nearEnemy(players[playerOnBoard].aRange)
+                chooseEnemy()
                 isEmptyFunc()
                 if isEmpty and not canMove then
                     yourTurn = false
-                    print("ich tue was ich soll")
+                    --[[ print("ich tue was ich soll") ]]
                 end
                 
             elseif not isEmpty then
@@ -260,6 +263,16 @@ function selectAndConfirm()
         else
             selected()
         end  
+    end
+end
+
+function chooseEnemy()
+    for i, enemy in ipairs(enemies) do
+        if round(pickPosX,2) == round(enemy.posX,2) and
+        round(pickPosY,2) == round(enemy.posY,2) then
+            chosenEnemyType = i
+            print("Es wurde der "..chosenEnemyType.."te ausgewaehlt")
+        end
     end
 end
 
@@ -288,9 +301,7 @@ end
 
 --[[ Funktion zum Testen ob ein Gegner höchstens ein Feld entfernt ist
     (nicht diagonal) ]]
-function nearEnemy(atkRange)
-
-    --[[ Auch hier sollte das +1, -1 durch das Runden ersetzt werden ]] 
+function nearEnemy(atkRange) 
 
     for i, enemy in ipairs(enemies) do
         --[[ Wenn Figur-Position auf gleicher Breite (X-Achse) wie der Gegner ist ]]
