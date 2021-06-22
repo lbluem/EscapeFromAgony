@@ -19,8 +19,8 @@ function dialogue:load()
     dialogueLength = {}
     dialogueLength[1] = 10
     dialogueLength[2] = 7
-    dialogueLength[3] = 14
-    dialogueLength[4] = 6
+    dialogueLength[3] = 15
+    dialogueLength[4] = 7
     dialogues = {}
 
     for i = 1,4,1 do
